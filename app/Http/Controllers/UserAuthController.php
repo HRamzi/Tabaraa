@@ -3,79 +3,97 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Utilisateur;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+
+use App\Models\Utilisateur;
 
 class UserAuthController extends Controller
 {
-    public function inscription()
+    public function afficherFormulaireInscription()
     {
         return view("auth.inscription");
     }
 
-    public function inscriptionUtilisateur(Request $request)
+    public function inscription(Request $request)
     {
-        // Validation des champs
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'Nom_Complet' => 'required|string|max:255',
             'email' => 'required|email|unique:utilisateurs|max:255',
-            'Numero_telephone' => 'required|string|max:20',
+            'numero_telephone' => [
+                'required',
+                'string',
+                'max:20',
+                function ($attribute, $value, $fail) {
+                    $existingUser = Utilisateur::where('numero_telephone', $value)->first();
+                    if ($existingUser) {
+                        $fail('Le numéro de téléphone existe déjà.');
+                    }
+                },
+            ],
             'mot_de_passe' => 'required|string|min:8',
             'confirmation_mot_de_passe' => 'required|string|same:mot_de_passe',
+            'photo_profile' => 'required|image|mimes:jpeg,png|max:2048',
         ]);
-
-        try {
-            // Création de l'utilisateur
-            $utilisateur = new Utilisateur();
-            $utilisateur->Nom_Complet = $request->Nom_Complet;
-            $utilisateur->email = $request->email;
-            $utilisateur->Numero_telephone = $request->Numero_telephone;
-            $utilisateur->mot_de_passe = Hash::make($request->mot_de_passe);
-            $utilisateur->save();
-        } catch (\Exception $e) {
-            // En cas d'erreur, rediriger vers la page d'inscription avec un message d'erreur
-            return redirect('/inscription')->withErrors(['error' => 'Une erreur s\'est produite lors de la création du profil.']);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Redirection vers la page de profil avec un message de succès
-        return redirect('/profile')->with('success', 'Votre profil a été créé avec succès !');
+        try {
+            if ($request->hasFile('photo_profile')) {
+                if ($request->file('photo_profile')->isValid()) {
+                    $imagePath = $request->photo_profile->store('uploads', 'public');
+                } else {
+                    return redirect()->back()->withInput()->with('error', 'Le fichier téléchargé n\'est pas valide.');
+                }
+            } else {
+                return redirect()->back()->withInput()->with('error', 'Veuillez sélectionner une image.');
+            }
+
+            $user = Utilisateur::create([
+                'Nom_Complet' => $request->Nom_Complet,
+                'email' => $request->email,
+                'numero_telephone' => $request->numero_telephone,
+                'mot_de_passe' => Hash::make($request->mot_de_passe),
+                'photo_profile' => $imagePath,
+            ]);
+            Auth::login($user);
+
+            return redirect('profile')->with('success', 'Votre profil a été créé avec succès !');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Une erreur s\'est produite lors de la création du profil.']);
+        }
     }
 
-    public function connexion()
+
+
+    public function afficherFormulaireConnexion()
     {
         return view("auth.connexion");
     }
 
-
-    public function connexionUtilisateur(Request $request)
-{
-    $credentials = $request->only(['email', 'mot_de_passe']);
-
-    // Recherche de l'utilisateur par son adresse email
-    $user = Utilisateur::where('email', $credentials['email'])->first();
-
-    // Vérification de l'existence de l'utilisateur et de la validité du mot de passe
-    if ($user && password_verify($credentials['mot_de_passe'], $user->mot_de_passe)) {
-        return redirect('/home');
-    }
-    throw ValidationException::withMessages([
-        'email' => ['Cet email et/ou ce mot de passe est incorrect.'],
-    ]);
-}
-
-    public function profile(){
-        return view('profile');
-    }
-
-
-    public function deconnexionUtilisateur()
+    public function connexion(Request $request)
     {
-        auth()->logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
+        $user = Utilisateur::where("email", $request->input("email"))->first();
 
-        return redirect()->route('home')->with('success', 'Deconnexion avec success');
+        if (!$user || !Hash::check($request->input("mot_de_passe"), $user->mot_de_passe)) {
+            $errors = [
+                'email' => ['Email and/or password incorrect.'],
+            ];
+            return redirect()->back()->withErrors($errors);
+        }
+        Auth::login($user);
+        return redirect('/user-home');
+    }
+
+    public function deconnexion(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('home')->with('success', 'Logout successful.');
     }
 }
