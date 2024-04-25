@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Utilisateur;
 use Illuminate\Validation\ValidationException;
@@ -58,13 +58,8 @@ class UserAuthController extends Controller
 
     // Vérification de l'existence de l'utilisateur et de la validité du mot de passe
     if ($user && password_verify($credentials['mot_de_passe'], $user->mot_de_passe)) {
-        auth()->login($user);
-
-        // Redirection de l'utilisateur vers la page d'accueil
         return redirect('/home');
     }
-
-    // Si les identifiants sont invalides, retourner une réponse d'erreur
     throw ValidationException::withMessages([
         'email' => ['Cet email et/ou ce mot de passe est incorrect.'],
     ]);

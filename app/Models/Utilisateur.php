@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\Utilisateurs as Authenticatable;
+use Illuminate\Contracts\Auth\Utilisateurs as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
@@ -17,4 +17,10 @@ class Utilisateur extends Model
         'Numero_telephone',
         'mot_de_passe'
     ];
+
+    public function markAsAuthenticated()
+    {
+        $this->est_authentifie = true;
+        $this->save();
+    }
 }
