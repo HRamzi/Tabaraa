@@ -44,14 +44,61 @@
                     </div>
 
                     <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
+<button title="Ma messagerie" class="repliable ham-toggle btn-light position-relative" onclick="markAllMessagesAsRead()">
+    <a href="{{ route('messages') }}" class="text-decoration-none">
+        <span class="shell msgs-shell position-relative d-inline-block">
+            <i class="fa fa-envelope fa-lg position-relative d-block mx-auto"></i>
+            <span id="message-counter" class="badge badge-pill badge-primary bg-danger position-absolute top-0 start-100 translate-middle p-1"></span>
+        </span>
+    </a>
+</button>
 
-                        <button title="Ma messagerie" class="repliable ham-toggle" data-target="nav-mails">
-                            <a href="{{ route('messages') }}">
-                                <span class="shell msgs-shell">
-                                    <i class="fa fa-envelope fa-lg"></i>
-                                </span>
-                            </a>
-                        </button>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assurez-vous d'inclure jQuery -->
+
+<script>
+    // Fonction pour marquer tous les messages comme lus
+  function markAllMessagesAsRead() {
+    $.ajax({
+        url: "{{ route('markAllMessagesAsRead') }}",
+        method: "POST",
+        success: function(data) {
+            console.log(data); // Ajoutez cette ligne pour afficher le résultat dans la console
+            if (data.success) {
+                // Mettre à jour le compteur de messages
+                $('#message-counter').text('').removeClass('show'); // Retire le compteur de messages
+            } else {
+                console.error('Erreur lors de la mise à jour des messages.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+    // Fonction pour mettre à jour le compteur de messages
+    function updateMessageCounter() {
+        $.ajax({
+            url: "{{ route('getMessageCount') }}",
+            method: "GET",
+            success: function(data) {
+                if (data.count > 0) {
+                    $('#message-counter').text(data.count).addClass('show'); // Ajoute la classe 'show' si le compteur est supérieur à 0
+                } else {
+                    $('#message-counter').removeClass('show'); // Retire la classe 'show' si le compteur est égal à 0
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Appeler la fonction pour mettre à jour le compteur au chargement de la page
+    $(document).ready(function() {
+        updateMessageCounter();
+    });
+</script>
+
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">

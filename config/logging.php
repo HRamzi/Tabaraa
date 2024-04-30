@@ -17,6 +17,19 @@ return [
     | one of the channels defined in the "channels" configuration array.
     |
     */
+'channels' => [
+    'stack' => [
+        'driver' => 'stack',
+        'channels' => ['daily'],
+    ],
+
+    'daily' => [
+        'driver' => 'daily',
+        'path' => storage_path('logs/laravel.log'),
+        'level' => 'debug',
+        'days' => 14,
+    ],
+],
 
     'default' => env('LOG_CHANNEL', 'stack'),
 

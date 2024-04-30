@@ -13,45 +13,102 @@ use App\Models\Message;
 
 class PusherController extends Controller
 {
-    public function MessageIndex()
-    {
-        return view('message.index');
+    
+
+public function MessageIndex()
+{
+    $messages = Message::all();
+    return view('message.index', compact('messages'));
+}
+
+public function markAllMessagesAsRead(Request $request) {
+    // Mettre à jour toutes les entrées de message comme lues
+    $updated = Message::query()->update(['read' => true]);
+
+    // Vérifiez si la mise à jour a réussi
+    if ($updated) {
+        // Retourner une réponse JSON pour indiquer le succès
+        return response()->json(['success' => true]);
+    } else {
+        // Retourner une réponse JSON pour indiquer l'échec
+        return response()->json(['success' => false]);
+    }
+}
+
+public function broadcast(Request $request)
+{
+    // Créer un nouveau message
+    $message = new Message();
+
+    // Récupérer l'ID de l'émetteur depuis la requête HTTP
+    $id_expediteur = $request->input('id_expediteur');
+
+    // Si l'ID de l'émetteur est fourni, définir l'ID de l'émetteur
+    if ($id_expediteur !== null) {
+        $message->id_expediteur = $id_expediteur;
     }
 
-    public function broadcast(Request $request)
-{
-    if (Auth::check()) {
-        // Récupérer l'ID de l'émetteur à partir de la session
-        $id_expediteur = Session::get('id_expediteur');
+    // Récupérer le contenu du message depuis la requête HTTP
+    $messageContent = $request->input('msg');
 
-        // Récupérer les données du message depuis la requête HTTP
-        $messageContent = $request->input('message');
+    // Si le contenu du message est vide, définir une valeur par défaut
+    if (empty($messageContent)) {
+        $messageContent = "Aucun contenu";
+    }
 
-        // Récupérer l'ID de l'annonce à partir de la requête
-        $annonceId = $request->input('id');
+    // Ajouter le contenu du message
+    $message->contenu = $messageContent;
 
-        // Récupérer l'annonce correspondante à partir de l'ID
-        $annonce = Annonce::findOrFail($annonceId);
+    // Récupérer l'ID du destinataire depuis la requête HTTP
+    $recipient_id = $request->input('id_destinataire');
 
-        // Récupérer l'ID du destinataire à partir de l'annonce
-        $id_destinataire = $annonce->id_utilisateur;
+    // Si l'ID du destinataire est null, forcer l'ajout du contenu du message
+    if ($recipient_id === null) {
+        // Enregistrer le message dans la base de données
+        $message->save();
+
+        // Retourner une réponse JSON avec le message créé
+        return response()->json(['message' => $message]);
+    } else {
+        // Définir l'ID du destinataire
+        $message->id_destinataire = $recipient_id;
 
         // Enregistrer le message dans la base de données
-        $message = new Message();
-        $message->content = $messageContent;
-        $message->id_expediteur = $id_expediteur;
-        $message->recipient_id = $id_destinataire;
         $message->save();
 
         // Diffuser le message via Pusher
         broadcast(new PusherBroadcast($messageContent))->toOthers();
 
-        // Retourner la vue de diffusion
-        return view('message.broadcast', ['message' => $messageContent]);
-    } else {
-        return redirect('afficherFormulaireConnexion')->with('error', 'Vous devez être connecté pour envoyer un message.');
+        // Retourner une réponse JSON avec le message créé
+        return response()->json(['message' => $message]);
     }
 }
+
+
+
+
+
+public function getUnreadMessageCount() {
+    if (Auth::check()) {
+        // Récupérer l'ID de l'utilisateur connecté
+        $userId = Auth::id();
+
+        // Récupérer le nombre total de messages pour cet utilisateur
+        $totalCount = Message::where('recipient_id', $userId)->count();
+
+        return response()->json(['count' => $totalCount]);
+    }
+    // Si l'utilisateur n'est pas connecté, retourner un compte de message de 0
+    return response()->json(['count' => 0]);
+}
+
+public function getMessageCount() {
+    // Récupérer le nombre total de messages dans la base de données
+    $totalCount = Message::count();
+
+    return response()->json(['count' => $totalCount]);
+}
+
 
     public function receive(Request $request)
     {

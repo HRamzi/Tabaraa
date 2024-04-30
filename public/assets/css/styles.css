@@ -9,7 +9,64 @@
 .ij{
     border-radius: 15px;
 }
-    
+  /* Styles pour l'icône de message */
+  .msgs-shell {
+      position: relative;
+      width: 40px;
+      /* Taille du conteneur de l'icône */
+      height: 40px;
+      border-radius: 50%;
+      /* Pour rendre le conteneur circulaire */
+      background-color: #f0f0f0;
+      /* Couleur de fond du conteneur */
+      display: flex;
+      justify-content: center;
+      /* Centrer horizontalement */
+      align-items: center;
+      /* Centrer verticalement */
+  }
+
+  /* Styles pour le badge */
+  .badge {
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 50%;
+      /* Pour rendre le badge circulaire */
+      position: absolute;
+      top: -10px;
+      /* Position verticale */
+      right: -10px;
+      /* Position horizontale */
+      color: red;
+      z-index: 1;
+      /* Pour le rendre au-dessus de l'icône */
+  }
+
+  #message-counter {
+      font-size: 16px;
+      /* Ajustez la taille de la police selon vos besoins */
+      width: 20px;
+      /* Ajustez la largeur selon vos besoins */
+      height: 20px;
+      /* Ajustez la hauteur selon vos besoins */
+      line-height: 20px;
+      /* Ajustez la hauteur de ligne selon vos besoins */
+      border-radius: 50%;
+      /* Pour rendre le badge circulaire */
+      text-align: center;
+      /* Centrer le texte horizontalement */
+      font-weight: bold;
+      /* Texte en gras */
+  }
+
+  #message-counter.show {
+      display: inline-block;
+  }
+  /* Style pour le bouton lorsqu'il est survolé */
+  .btn-light:hover {
+      background-color: #f0f0f0;
+      /* Couleur de fond lorsqu'il est survolé */
+  }
 .ijdroite{
     border-radius: 15px;
 }

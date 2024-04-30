@@ -2,6 +2,7 @@
 <html lang="fr">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
@@ -200,19 +201,24 @@
                     <div id="">
                         <div class="panel pt-xs pb-xs">
                             <div id="form-holder">
-                                <form class="new-msg" method="POST" action="{{ route('messages') }}">
-                                    <h2 class="annonce-detail-title-rep">
-                                        <span><i class="fa fa-comments-o"></i>Contacter le donneur</span>
-                                    </h2>
-                                    <input type="hidden" name="dest" value="1299875" />
-                                    <textarea class="reset-input" id="#msg-target" name="msg" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
-                                    <div class="text-center mt-md">
-                                        <button type="submit" class="btn blue lg submit-contact">
-                                            <i class="fa fa-envelope"></i>
-                                            Envoyer
-                                        </button>
-                                    </div>
-                                </form>
+<form class="new-msg" id="message-form">
+    <h2 class="annonce-detail-title-rep">
+        <span><i class="fa fa-comments-o"></i>Contacter le destinataire</span>
+    </h2>
+    <input type="hidden" name="id_destinataire" value="1" />
+    <input type="hidden" name="id_expediteur" value="2" /> <!-- Utilisez l'ID de l'utilisateur authentifié -->
+    <textarea class="reset-input" id="msg-target" name="msg" cols="100" rows="6" maxlength="1000"
+        placeholder="Écrivez votre message ici"></textarea>
+    <div class="text-center mt-md">
+        <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
+            <i class="fa fa-envelope"></i>
+            Envoyer
+        </button>
+    </div>
+</form>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -255,5 +261,54 @@
     <script src="{{ asset('assets\js\script2.js') }}"></script>
     <script src="{{ asset('assets\js\script3.js') }}"></script>
     <script src="{{ asset('assets\js\user.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script> <!-- Ajoutez jQuery -->
+<script>
+    function sendMessage() {
+        // Récupérer le jeton CSRF depuis la balise meta
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        // Récupérer les données du formulaire
+        var formData = new FormData(document.getElementById('message-form'));
+
+        // Ajouter le jeton CSRF à la requête
+        formData.append('_token', csrfToken);
+
+        // Envoyer les données via AJAX à la route broadcast
+        $.ajax({
+            url: "{{ route('broadcast') }}",
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Afficher une notification de succès avec SweetAlert2
+                Swal.fire({
+                    title: 'Message envoyé !',
+                    text: 'Votre message a été envoyé avec succès.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 5000 // Ferme automatiquement la notification après 1.5 seconde
+                });
+
+                // Rediriger vers la page des messages après 2 secondes
+                setTimeout(function() {
+                    window.location.href = "{{ route('messages') }}";
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                // Afficher une notification d'erreur avec SweetAlert2
+                Swal.fire({
+                    title: 'Erreur !',
+                    text: 'Une erreur s\'est produite lors de l\'envoi du message.',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 5000 // Ferme automatiquement la notification après 1.5 seconde
+                });
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

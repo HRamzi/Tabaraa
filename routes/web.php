@@ -11,30 +11,20 @@ use App\Http\Controllers\PusherController;
 Route::get('/', [HomeController::class, 'afficherHomeAnnonces']);
 Route::get('/home', [HomeController::class, 'afficherHomeAnnonces'])->name('home');
 
-
-
 Route::get('/connexion', [UserAuthController::class, 'afficherFormulaireConnexion'])->name('afficherFormulaireConnexion');
 Route::post('/connexion', [UserAuthController::class, 'connexion'])->name('connexion');
 Route::get('/inscription', [UserAuthController::class, 'afficherFormulaireInscription'])->name('afficherFormulaireInscription');
 Route::post('/inscription', [UserAuthController::class, 'inscription'])->name('inscription');
 
-
-
 Route::get('/user-home', [HomeController::class, 'afficherUserHomeAnnonces']);
 
-
-
 Route::get('/deconnexion', [UserAuthController::class, 'deconnexion'])->name('deconnexion');
-
-
 
 Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
 Route::get('/mesAnnonces', [ProfileController::class, 'mesAnnonces'])->name('mesAnnonces');
 Route::post('/modifier-mot-de-passe', [ProfileController::class, 'modifierMotDePasse'])->name('modifier-mot-de-passe');
 Route::post('/modifier-numero-telephone', [ProfileController::class, 'modifierNumeroTelephone'])->name('modifier-numero-telephone');
 Route::post('/supprimer-compte', [ProfileController::class, 'supprimerCompte'])->name('supprimerCompte');
-
-
 
 Route::prefix('userNotAuth')->group(function () {
     Route::get('/categories/vetements', [recupererAnnonce::class, 'afficherAnnoncesVetement'])->name('vetement');
@@ -61,12 +51,13 @@ Route::put('/annonces/{annonce}/modifier', [CreeAnnonceController::class, 'formu
 Route::post('/annonces/{annonce}', [CreeAnnonceController::class, 'modifierAnnonce'])->name('annonces.update');
 Route::delete('/annonces/{id}',[CreeAnnonceController::class, 'supprimerAnnonce'])->name('annonces.supprimer');
 
-
-
 Route::get('/annonce/{id}', [recupererAnnonce::class, 'detailsAnnonce'])->name('annonce.details');
 
-
-
 Route::get('/messages', [PusherController::class, 'MessageIndex'])->name('messages');
-Route::post('/broadcast', [PusherController::class, 'broadcast']);
-Route::post('/receive', [PusherController::class, 'receive']);
+ 
+Route::post('/receive', [PusherController::class, 'receive'])->name('receive');
+Route::get('/unread-message-count', [PusherController::class, 'getUnreadMessageCount'])->name('getUnreadMessageCount');
+Route::get('/message-count', [PusherController::class, 'getMessageCount'])->name('getMessageCount');
+Route::post('/broadcast', [PusherController::class, 'broadcast'])->name('broadcast');
+
+Route::post('/mark-all-messages-as-read', [PusherController::class, 'markAllMessagesAsRead'])->name('markAllMessagesAsRead');

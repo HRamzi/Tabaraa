@@ -10,5 +10,10 @@ class Message extends Model
         'id_expediteur',
         'id_destinataire',
         'contenu',
+        'read',
+    ];
+
+    protected $casts = [
+        'read' => 'boolean', // Indique à Laravel que 'read' doit être traité comme un type booléen
     ];
 }

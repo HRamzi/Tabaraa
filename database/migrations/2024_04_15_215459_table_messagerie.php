@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_expediteur');
             $table->unsignedBigInteger('id_destinataire');
-            $table->text('contenu');
+            $table->text('contenu')->nullable(); // Modifier pour rendre nullable
             $table->timestamps();
 
             $table->foreign('id_expediteur')->references('id')->on('utilisateurs')->onDelete('cascade');
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('messages');
     }
 };
