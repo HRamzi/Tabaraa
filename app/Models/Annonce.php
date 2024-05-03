@@ -22,7 +22,7 @@ class Annonce extends Model
 
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'id');
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
 
     public function categorie()
