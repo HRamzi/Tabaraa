@@ -58,6 +58,7 @@ class UserAuthController extends Controller
                 'numero_telephone' => $request->numero_telephone,
                 'mot_de_passe' => Hash::make($request->mot_de_passe),
                 'photo_profile' => $imagePath,
+                'role' => 'user', // Affecter le rôle de l'utilisateur comme 'user'
             ]);
             Auth::login($user);
 
@@ -66,8 +67,6 @@ class UserAuthController extends Controller
             return redirect()->back()->withErrors(['error' => 'Une erreur s\'est produite lors de la création du profil.']);
         }
     }
-
-
 
     public function afficherFormulaireConnexion()
     {
@@ -84,8 +83,15 @@ class UserAuthController extends Controller
             ];
             return redirect()->back()->withErrors($errors);
         }
+
         Auth::login($user);
-        return redirect('/user-home');
+
+        // Redirection en fonction du rôle de l'utilisateur
+        if ($user->role === 'admin') {
+            return redirect('/admin-home');
+        } else {
+            return redirect('/user-home');
+        }
     }
 
     public function deconnexion(Request $request)
@@ -94,6 +100,6 @@ class UserAuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('home')->with('success', 'Logout successful.');
+        return redirect('home')->with('success', 'Vous avez été déconnecté avec succès.');
     }
 }

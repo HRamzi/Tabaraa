@@ -201,7 +201,29 @@
                 </span>
             </div>
             @endif
+            <div class="infos text-center mt-4">
+                                <button class="btn btn-success" onclick="showSuccessMessage()">
+                                    <i class="fa fa-check"></i> Je le Récupère
+                                </button>
+                            </div>
+                            <script>
+    function showSuccessMessage() {
+        // Ici vous pouvez effectuer une requête Ajax ou une autre opération
+        // Au lieu d'une alerte, vous pouvez utiliser SweetAlert pour afficher un message de succès
 
+        // Par exemple, imaginons que vous avez reçu une réponse de votre requête Ajax
+        var data = { code: 1 }; 
+
+        // Vérifiez si la réponse de la requête est 1 (succès)
+        if (data.code === 1) {
+            // Affichage d'un message de succès avec SweetAlert
+            Swal.fire({
+                title: "Votre demande a été effectuée avec succès",
+                icon: "success"
+            });
+        }
+    }
+</script>
         </div>
     </div>
 </div>
