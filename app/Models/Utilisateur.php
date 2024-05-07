@@ -17,7 +17,7 @@ class Utilisateur extends Authenticatable
      * @var array
      */
 
-    protected $table = 'Utilisateurs';
+    protected $table = 'utilisateurs'; // Définir le nom de la table en minuscules et pluriel
 
     protected $fillable = [
         'id',
@@ -26,31 +26,10 @@ class Utilisateur extends Authenticatable
         'numero_telephone',
         'mot_de_passe',
         'photo_profile',
+        'role', // Ajout de la colonne role
     ];
 
-    public function annonces()
-    {
-        return $this->hasMany(Annonce::class, 'id_utilisateur');
-    }
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // ...
 
     /**
      * Save the user instance to the database.

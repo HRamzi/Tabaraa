@@ -308,6 +308,7 @@
             <div id="detail" class="f-container f-direction-column f-md-direction-row f-wrap-nowrap f-align-stretch">
                 <div id="detail-body">
                     <br><br>
+<<<<<<< HEAD
                     <div class="panel">
                         <div id="content-titre">
                             <div class="f-container f-align-center f-wrap-nowrap cat-9 content-heading">
@@ -377,6 +378,109 @@
                             </div>
                         </div>
                     </div>
+=======
+                        <div class="panel">
+    <div id="content-titre">
+        <div class="f-container f-align-center f-wrap-nowrap cat-9 content-heading">
+            @if($annonce)
+            <h1 class="titret f-grow-1">{{ $annonce->titre }}</h1>
+            <br>
+            @endif
+            <br>
+        </div>
+        <br>
+        <br>
+    </div>
+    <div class="f-container no-gutter">
+        <div class="f-item f-lg-50">
+            <div id="swiper-photos" class="swiper">
+                @if($annonce)
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        @if($annonce->photo)
+                        <img src="{{ asset('storage/' . $annonce->photo) }}" class="responsive-img thumbnail-extends" width="350" height="350" alt="Photo de l'annonce" />
+                        @endif
+                        <br>
+                        <div class="swiper-lazy-preloader"></div>
+                    </div>
+                </div>
+                @endif
+
+            </div>
+        </div>
+        <div class="f-item f-container f-wrap-nowrap f-direction-column f-lg-50">
+            <div class="infos text-lg f-container f-wrap-nowrap f-align-center">
+                @if($annonce)
+                <div class="f-grow-1">
+                    <i class="fa fa-map-marker"></i>
+                    &nbsp;{{ $annonce->ville }}
+                </div>
+                @endif
+
+            </div>
+            <div class="infos text-lg f-container f-wrap-nowrap f-align-center">
+                @if($annonce)
+                <div class="f-grow-1">
+                    <i class="fa-solid fa-phone"></i>
+                    &nbsp;{{ $annonce->numero_telephone }}
+                </div>
+                @endif
+
+            </div>
+            @if($annonce)
+            <div class="infos f-grow-1">
+                <div class="fx-mmm">
+                    <br />
+                    {{ $annonce->description }}
+                </div>
+            </div>
+            @endif
+
+            @if($annonce)
+            <div class="infos">
+                <span class="text-intense-grey text-sm">
+                    <i class="fa fa-clock-o"></i>
+                    &nbsp;{{ $annonce->created_at ? $annonce->created_at->format('d M Y') : '' }}
+                </span>
+            </div>
+            @endif
+
+            @if($annonce)
+            <div class="infos">
+                <span class="text-intense-grey text-sm">
+                    <i class="fa fa-user"></i>
+                    &nbsp;{{ $annonce->utilisateur->Nom_Complet }}
+                </span>
+            </div>
+            @endif
+            <div class="infos text-center mt-4">
+                                <button class="btn btn-success" onclick="showSuccessMessage()">
+                                    <i class="fa fa-check"></i> Je le Récupère
+                                </button>
+                            </div>
+                            <script>
+    function showSuccessMessage() {
+        // Ici vous pouvez effectuer une requête Ajax ou une autre opération
+        // Au lieu d'une alerte, vous pouvez utiliser SweetAlert pour afficher un message de succès
+
+        // Par exemple, imaginons que vous avez reçu une réponse de votre requête Ajax
+        var data = { code: 1 }; 
+
+        // Vérifiez si la réponse de la requête est 1 (succès)
+        if (data.code === 1) {
+            // Affichage d'un message de succès avec SweetAlert
+            Swal.fire({
+                title: "Votre demande a été effectuée avec succès",
+                icon: "success"
+            });
+        }
+    }
+</script>
+        </div>
+    </div>
+</div>
+
+>>>>>>> fca1b099ca007db4f969934cdc4703b38868a915
                     <br>
                     <br><br>
                     <div id="">

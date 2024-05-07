@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable(false);
             $table->string('Numero_telephone')->unique()->nullable(false);
             $table->string('mot_de_passe')->nullable(false);
+            $table->enum('role', ['utilisateur', 'admin'])->default('utilisateur');
             $table->timestamps();
         });
     }

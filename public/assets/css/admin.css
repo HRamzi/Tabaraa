@@ -1,0 +1,42 @@
+/* Votre propre feuille de style pour l'administration */
+
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+}
+
+.container-fluid {
+    padding-top: 20px;
+}
+
+/* Cartes */
+.card {
+    margin-bottom: 20px;
+}
+
+/* Barre de navigation */
+.navbar {
+    background-color: #343a40 !important;
+}
+
+/* Liens de la barre de navigation */
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #fff !important;
+}
+
+/* Icônes de la barre de navigation */
+.navbar-dark .navbar-nav .nav-link .fas {
+    margin-right: 5px;
+}
+
+/* Footer */
+footer {
+    padding: 15px 0;
+    background-color: #f8f9fa;
+    text-align: center;
+}

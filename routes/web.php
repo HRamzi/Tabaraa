@@ -7,26 +7,30 @@ use App\Http\Controllers\recupererAnnonce;
 use App\Http\Controllers\CreeAnnonceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PusherController;
+use App\Http\Controllers\AdminHomeController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminAnnonceController;
 
 Route::get('/', [HomeController::class, 'afficherHomeAnnonces']);
 Route::get('/home', [HomeController::class, 'afficherHomeAnnonces'])->name('home');
 
+// Routes pour l'authentification
 Route::get('/connexion', [UserAuthController::class, 'afficherFormulaireConnexion'])->name('afficherFormulaireConnexion');
 Route::post('/connexion', [UserAuthController::class, 'connexion'])->name('connexion');
 Route::get('/inscription', [UserAuthController::class, 'afficherFormulaireInscription'])->name('afficherFormulaireInscription');
 Route::post('/inscription', [UserAuthController::class, 'inscription'])->name('inscription');
 
-Route::get('/user-home', [HomeController::class, 'afficherUserHomeAnnonces'])->name('userHome');
+Route::get('/user-home', [HomeController::class, 'afficherUserHomeAnnonces']);
 
 Route::get('/deconnexion', [UserAuthController::class, 'deconnexion'])->name('deconnexion');
 
 Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
 Route::get('/mesAnnonces', [ProfileController::class, 'mesAnnonces'])->name('mesAnnonces');
 Route::post('/modifier-mot-de-passe', [ProfileController::class, 'modifierMotDePasse'])->name('modifier-mot-de-passe');
-Route::get('/modifier-numero-telephone', [ProfileController::class, 'afficherFormulaireModifierNumeroTelephone'])->name('afficherFormulaireModifierNumeroTelephone');
-Route::post('/modifier-numero-telephone', [ProfileController::class, 'modifierNumeroTelephone'])->name('modifier_numero_telephone');
+Route::post('/modifier-numero-telephone', [ProfileController::class, 'modifierNumeroTelephone'])->name('modifier-numero-telephone');
 Route::post('/supprimer-compte', [ProfileController::class, 'supprimerCompte'])->name('supprimerCompte');
 
+// Autres routes pour les utilisateurs non authentifiés
 Route::prefix('userNotAuth')->group(function () {
     Route::get('/categories/vetements', [recupererAnnonce::class, 'afficherAnnoncesVetement'])->name('vetement');
     Route::get('/categories/livres', [recupererAnnonce::class, 'afficherAnnoncesLivre'])->name('livre');
@@ -36,7 +40,8 @@ Route::prefix('userNotAuth')->group(function () {
     Route::get('/categories/autre', [recupererAnnonce::class, 'afficherAnnoncesAutre'])->name('autre');
 });
 
-Route::prefix('userAuth')->group(function () {
+// Autres routes pour les utilisateurs authentifiés
+Route::prefix('userAuth')->middleware('auth')->group(function () {
     Route::get('/categories/vetements', [recupererAnnonce::class, 'afficherAnnoncesVetement_AfterAuth'])->name('userAuth_vetement');
     Route::get('/categories/livres', [recupererAnnonce::class, 'afficherAnnoncesLivre_AfterAuth'])->name('userAuth_livre');
     Route::get('/categories/medecine', [recupererAnnonce::class, 'afficherAnnoncesMedecine_AfterAuth'])->name('userAuth_medecine');
@@ -45,6 +50,8 @@ Route::prefix('userAuth')->group(function () {
     Route::get('/categories/autre', [recupererAnnonce::class, 'afficherAnnoncesAutre_AfterAuth'])->name('userAuth_autre');
 });
 
+// Autres routes pour la création, la modification, etc. d'annonces
+
 Route::get('/annonces/cree', [CreeAnnonceController::class, 'creeAnnonce'])->name('annonces.cree');
 Route::post('/annonces', [CreeAnnonceController::class, 'store'])->name('annonces.store');
 Route::post('/annonces/recherche', [CreeAnnonceController::class, 'recherche'])->name('rechercher');
@@ -52,14 +59,16 @@ Route::put('/annonces/{annonce}/modifier', [CreeAnnonceController::class, 'formu
 Route::post('/annonces/{annonce}', [CreeAnnonceController::class, 'modifierAnnonce'])->name('annonces.update');
 Route::delete('/annonces/{id}', [CreeAnnonceController::class, 'supprimerAnnonce'])->name('annonces.supprimer');
 
+
+// Routes pour afficher les détails d'une annonce
 Route::get('/annonce/{id}', [recupererAnnonce::class, 'detailsAnnonce'])->name('annonce.details');
 
 
+// Routes pour la messagerie
 Route::get('/messages', [PusherController::class, 'MessageIndex'])->name('messages');
-
+ 
 Route::post('/receive', [PusherController::class, 'receive'])->name('receive');
 Route::get('/unread-message-count', [PusherController::class, 'getUnreadMessageCount'])->name('getUnreadMessageCount');
 Route::get('/message-count', [PusherController::class, 'getMessageCount'])->name('getMessageCount');
 Route::post('/broadcast', [PusherController::class, 'broadcast'])->name('broadcast');
-
 Route::post('/mark-all-messages-as-read', [PusherController::class, 'markAllMessagesAsRead'])->name('markAllMessagesAsRead');
