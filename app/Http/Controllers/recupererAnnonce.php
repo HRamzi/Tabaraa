@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Annonce;
+use Illuminate\Support\Facades\Auth;
 
 class recupererAnnonce extends Controller
 {
@@ -36,7 +37,7 @@ class recupererAnnonce extends Controller
         return view('categories.userNotAuth.medecine', compact('annonces'));
     }
 
-    public function afficherAnnoncesArticle_Maison()
+    public function afficherAnnonces_Article_Maison()
     {
         $annonces = Annonce::where('categorie', 'article_maison')
                             ->with('utilisateur')

@@ -28,6 +28,10 @@ class ProfileController extends Controller
         return view('mesAnnonces', compact('annonces'));
     }
 
+    public function afficherFormulaireModifierNumeroTelephone(){
+        $user = auth()->user();
+        return view('profileSettings.numTelephone', compact('user'));
+    }
 
     public function modifierNumeroTelephone(Request $request)
     {

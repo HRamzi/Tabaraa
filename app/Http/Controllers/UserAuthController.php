@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 use App\Models\Utilisateur;
+use App\Models\Annonce;
 
 class UserAuthController extends Controller
 {
@@ -69,7 +73,7 @@ class UserAuthController extends Controller
 
 
 
-    public function afficherFormulaireConnexion()
+    public function afficherFormulaireConnexion(Request $request)
     {
         return view("auth.connexion");
     }
@@ -85,6 +89,7 @@ class UserAuthController extends Controller
             return redirect()->back()->withErrors($errors);
         }
         Auth::login($user);
+
         return redirect('/user-home');
     }
 

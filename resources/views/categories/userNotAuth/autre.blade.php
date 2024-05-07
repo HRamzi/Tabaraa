@@ -24,10 +24,10 @@
                     </div>
                     <div class="f-container">
                         <div class="f-align-self-start">
-                            <a class="f-container logo-picto" href="#" title="Site de don d'objets">
-                                <img class="logo f-align-self-center" height="20" width="20" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="Tabaraa" />
+                            <a class="f-container logo-picto" href="{{ route('home') }}" title="Site de don d'objets">
+                                <img class="logo f-align-self-center" height="50" width="50" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                             </a>
-                            <a class="f-container logo-full" href="#" title="Site de don d'objets">
+                            <a class="f-container logo-full" href="{{ route('home') }}" title="Site de don d'objets">
                                 <img class="logo f-align-self-center" height="50" width="100" src="{{ asset('assets\images\Tabaraalogo.svg') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                             </a>
                         </div>
@@ -44,12 +44,12 @@
 
                     <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
 
-                        <a class="repliable btn  post-holder" href="l{{ route('connexion') }}" title="Publier une annonce pour donner un objet">
+                        <a class="repliable btn  post-holder" href="{{ route('annonces.cree') }}" title="Publier une annonce pour donner un objet">
                             <i class="fa fa-plus"></i>
                             <span class="label">Créer une annonce</span>
                         </a>
 
-                        <a id="header-login-btn" class="repliable tool" href="l{{ route('connexion') }}">
+                        <a id="header-login-btn" class="repliable tool" href="{{ route('afficherFormulaireConnexion') }}">
                             <i class="fa fa-user fa"></i>
                             <span>Mon Compte</span>
                         </a>
@@ -58,37 +58,39 @@
                     </div>
 
                 </div>
-                <div class="f-container f-content-center spaced" id="global-search">
+                <di<div class="f-container f-content-center spaced" id="global-search">
                     <div class="f-item">
                         <div id="search-header-appbar">
                             <button id="close-search-header"><i class="fa fa-chevron-left"></i></button>
                             <span>Ma recherche</span>
                         </div>
-                        <div class="f-container pt-sm search-filter-zone text-sm">
-                            <div class="search-cell">
-                                <label for="search-header-keywords" class="search-input-label">Que recherchez-vous ?</label>
-                                <input class="select2" id="search-header-keywords" type="text" maxlength="20" placeholder="Table,Pull..." value="" />
-
-                            </div>
-                            <div class="search-cell">
-                                <label for="search-header-keywords" class="search-input-label">Sur quelle ville ?</label>
-                                <input class="select2" id="search-header-keywords" type="text" maxlength="50" placeholder="Tlemcen,Oran.." value="" />
-                                <!-- <span class="search-header-reset-keywords disabled"><i class="fa fa-close"></i></span> -->
-                            </div>
-                            <div class="search-cell">
-                                <button id="search-header-submit" class="search-valid search" data-target="#search-header-alert">
-                                    <i class="fa fa-search"></i>
-                                    <a href="{{ route('rechercher') }}">Rechercher</a>
-                                    <!-- <span class="search-header-nb-results"></span> -->
-                                    <div id="search-header-alert" class="text-xs text-center display-soft-none">
-                                        Veuillez sélectionner au moins un critère ci-dessus
+                        <form action="{{ route('rechercher') }}" method="POST">
+                            @csrf
+                            <div class="f-container pt-sm search-filter-zone text-sm">
+                                <div class="search-cell">
+                                    <label for="search-header-keywords" class="search-input-label">Que recherchez-vous ?</label>
+                                    <input class="select2" name="termes" id="search-header-keywords" type="text" maxlength="20" placeholder="Table,Pull..." value="" />
+                                </div>
+                                <div class="search-cell">
+                                    <label for="search-header-keywords" class="search-input-label">Sur quelle ville ?</label>
+                                    <input class="select2" name="ville" id="search-header-keywords" type="text" maxlength="50" placeholder="Tlemcen,Oran.." value="" />
+                                    <!-- <span class="search-header-reset-keywords disabled"><i class="fa fa-close"></i></span> -->
+                                </div>
+                                <div class="search-cell">
+                                    <button type="submit" id="search-header-submit" class="search-valid search" data-target="#search-header-alert">
+                                        <i class="fa fa-search"></i>
+                                        Rechercher
+                                        <!-- <span class="search-header-nb-results"></span> -->
+                                        <div id="search-header-alert" class="text-xs text-center display-soft-none">
+                                            Veuillez sélectionner au moins un critère ci-dessus
+                                        </div>
+                                    </button>
+                                    <div class="pt-sm text-center bloc_saved_search has-recherches display-none">
+                                        <button class="btn outline  open-saved-search">Mes recherches</button>
                                     </div>
-                                </button>
-                                <div class="pt-sm text-center bloc_saved_search has-recherches display-none">
-                                    <button class="btn outline  open-saved-search">Mes recherches</button>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <button id="global-search-close" class="icon-btn "><i class="fa fa-arrow-up"></i></button>
                 </div>
@@ -154,7 +156,7 @@
                                             </div>
                                         </div>
                                         <div class="f-container f-content-end pa-xs">
-                                            <button type="button" onclick="window.location='{{ route('annonce.details', ['id' => $annonce->id]) }}'">Cliquez-moi pour rediriger</button>
+                                            <button type="button" class="btn blue" onclick="window.location='{{ route('afficherFormulaireConnexion') }}'">Je suis intéressé</button>
                                         </div>
                                     </div>
                                 </div>

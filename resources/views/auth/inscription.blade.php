@@ -26,10 +26,10 @@
                     </div>
                     <div class="f-container">
                         <div class="f-align-self-start">
-                            <a class="f-container logo-picto" href="#" title="Site de don d'objets">
+                            <a class="f-container logo-picto" href="{{ route('home') }}" title="Site de don d'objets">
                                 <img class="logo f-align-self-center" height="20" width="20" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                             </a>
-                            <a class="f-container logo-full" href="index6.html" title="Site de don d'objets">
+                            <a class="f-container logo-full" href="{{ route('home') }}" title="Site de don d'objets">
                                 <img class="logo f-align-self-center" height="50" width="100" src="{{ asset('assets\images\Tabaraalogo.svg') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                             </a>
                         </div>
@@ -210,8 +210,8 @@
             "API_Modules": "{}"
         };
     </script>
-    <script src="script1.js"></script>
-    <script src="script2.js"></script>
+    <script src="{{ asset('assets\js\script1.js') }}"></script>
+    <script src="{{ asset('assets\js\script2.js') }}"></script>
 </body>
 
 </html>

@@ -24,7 +24,7 @@
                         </div>
                         <div class="f-container">
                             <div class="f-align-self-start">
-                                <a class="f-container logo-full" href="#" title="Site de don d'objets">
+                                <a class="f-container logo-full" href="{{ route('home') }}" title="Site de don d'objets">
                                     <img class="logo f-align-self-center" height="50" width="100" src="{{ asset('assets\images\Tabaraalogo.svg') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                                 </a>
                             </div>
@@ -61,7 +61,7 @@
                 <a href="{{ route('auto') }}" title="pieces_auto">&nbsp; &nbsp; <i class="fa-solid fa-car fa-xl" style="color: #354c73;"></i>  &nbsp; &nbsp; Pièces Automobiles</a>
                 <a href="{{ route('autre') }}" title="autres">&nbsp; &nbsp; <i class="fa-brands fa-slack fa-xl" style="color: #3a2612;"></i>&nbsp; &nbsp;&nbsp; Autres</a>
             </div>
-       </div>
+    </div>
         <div class="deco-bg">
             <div class="container main-bg">
                 <h1><i class="fa fa-user"></i>Connexion</h1>
@@ -96,6 +96,7 @@
                                             </label>
                                             <div class="f-item pb-sm text"><em><a href="mot-de-passe-perdu">Mot de passe oublié ?</a></em></div>
                                         </div>
+                                        <input type="hidden" name="url" value="{{ url()->current() }}">
                                     </div>
                                     <div class="f-container text-center no-gutter block-input submit">
                                         <div class="f-item"><button type="submit" class=" btn blue">Se connecter</button></div>
@@ -126,20 +127,25 @@
                         &nbsp;
                         <span class="text-blue-light">personnes étant dans le besoin</span></span>
                     </div>
-                   
+                
                 </div>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             </div>
             <footer class="footer">
                 <ul class="menu">
-                  <li class="menu__item"><a class="menu__link" href="#">Accueil</a></li>
-                  <li class="menu__item"><a class="menu__link" href="#">Contact : Tabaraa.dz@gmail.com</a></li>
+                    <li class="menu__item"><a class="menu__link" href="#">Accueil</a></li>
+                    <li class="menu__item"><a class="menu__link" href="#">Contact : Tabaraa.dz@gmail.com</a></li>
                 </ul>
                 <p>&copy;2024 Tabaraa | Tous droits réservés</p>
             </footer>
         </div>
-        <script>var $globals = {"API_Options":"{}","API_Modules":"{}"};</script>
-        <script src="script1.js"></script>
-        <script src="script2.js"></script>
+        <script>
+            var $globals = {
+                "API_Options": "{}",
+                "API_Modules": "{}"
+            };
+        </script>
+        <script src="{{ asset('assets\js\script1.js') }}"></script>
+        <script src="{{ asset('assets\js\script2.js') }}"></script>
     </body>
 </html>

@@ -2,19 +2,15 @@
 <html lang="en">
 
 <head>
-    <title>Messages</title>
-    <link rel="icon" href="https://assets.edlin.app/favicon/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- JavaScript -->
-    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <!-- End JavaScript -->
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/message-style.css') }}" />
-    <!-- End CSS -->
-
+    <link rel="preload" as="font" href="/fonts/fontawesome-webfont.woff2?v=4.7.0" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/icomoon4.woff2" type="font/woff2" crossorigin>
+    <scrip src="{{ asset('assets\js\App.js') }}">
+        </script>
+        <script src="{{ asset('assets\js\pusher.js') }}"></script>
+        <script src="{{ asset('assets\js\jQuery.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('assets/css/message-style.css') }}" />
+        <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
+        <title>Messages</title>
 </head>
 
 <body>
@@ -45,8 +41,7 @@
                 @php
                 $utilisateur = auth()->user();
                 @endphp
-                <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" width="150px" height="150px"
-                    alt="Avatar">
+                <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" width="150px" height="150px" alt="Avatar">
                 @endif
                 <p>{{ $message->contenu }}</p>
             </div>
@@ -69,8 +64,8 @@
 <script>
     const pusher = new Pusher('{{config('
         broadcasting.connections.pusher.key ')}}', {
-        cluster: 'eu'
-    });
+            cluster: 'eu'
+        });
     const channel = pusher.subscribe('public');
 
     //Receive messages

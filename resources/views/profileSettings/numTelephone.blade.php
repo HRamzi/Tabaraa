@@ -2,13 +2,16 @@
 <html lang="fr">
 
 <head>
+
+
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
     <title>Tabaraa</title>
+
 </head>
 
-<body id="page-liste">
+<body id="page-profil">
     <header class="tabaraa-header">
         <div class="head-top"></div>
         <div class="toolsbar-dummy"></div>
@@ -104,9 +107,9 @@
                             <span class="shell">
                                 @php $utilisateur = auth()->user(); @endphp
                                 @if($utilisateur)
-                                    <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
+                                <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
                                 @else
-                                    <img src="{{ asset('assets\images\avatar.png') }}" loading="lazy" decoding="async" alt="Mon avatar">
+                                <img src="{{ asset('assets\images\avatar.png') }}" loading="lazy" decoding="async" alt="Mon avatar">
                                 @endif
                             </span>
                         </button>
@@ -177,17 +180,15 @@
     </header>
     <div class="ham-nav ham-right" id="nav-user" data-icon="user" data-title="profil">
         <div class="title"><i class="fa fa-user"></i>
-            <span class="f-grow-1 flex-text">profile</span>
+            <span class="f-grow-1 flex-text">profil</span>
             <span class="ham-close"><i class="fa fa-close"></i></span>
         </div>
         <div class="ham-content">
-
             <a href="{{ route('profile') }}" title="Gérer mon compte">Mon compte</a>
             <a href="{{ route('mesAnnonces') }}" title="Voir la liste de mes annonces">Mes annonces</a>
             <a href="{{ route('annonces.cree') }}" title="Publier une annonce">Créer une annonce</a>
-            <a href="{{ route('afficherFormulaireConnexion') }}" rel="nofollow">Se déconnecter</a>
+            <a href="{{ route('deconnexion') }}" rel="nofollow">Se déconnecter</a>
         </div>
-    </div>
     </div>
     <div class="ham-nav ham-right" id="nav-global" data-icon="bell" data-title="Tabaraa">
         <div class="title">
@@ -207,54 +208,50 @@
 
         </div>
     </div>
-
     <div class="global-shadow"></div>
+
     <div class="deco-bg">
         <div class="container main-bg">
-            <div><br><br></div>
-            <h2 class="text-left f-item"><b>Annonces Livres</b></h2>
-            <div class="container f-container f-wrap-nowrap ">
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <div id="search-wrapper">
-                    <div id="search">
-                        <!-- Utiliser une boucle foreach pour afficher les annonces -->
-                        @if($annonces->count() > 0)
-                        @foreach($annonces as $annonce)
-                        <div class="don" href="/don/{{ $annonce->id }}" title="{{ $annonce->titre }}" class="lst-annonce cat-{{ $annonce->categorie }}">
-                            <div class="line"></div>
-                            <div class="list-item f-container f-wrap-nowrap">
-                                <div class="cover">
-                                    <img src="{{ asset('storage/' . $annonce->photo) }}" title="{{ $annonce->titre }}" width="200" height="200" style="margin-top: 80px;" />
+            <h1 class="rep"><i class="fa fa-envelope-o mr-xs"></i>Modification nom d'utilisateur</h1>
+            <div class="panel pa-xl ma-xs">
+
+
+                <form action="{{ route('modifier_numero_telephone') }}" method="post" class="custom-form f-item pa-xs">
+                    @csrf
+                    <div class="grey mt-xl">
+                        <div class="block-input f-item">
+                            <label class="f-container area">
+                                <div class="f-item f-md-50 text-center">
+                                    Numéro de téléphone actuel
                                 </div>
-                                <div class="f-item f-container f-wrap-nowrap pa-md">
-                                    <div class="f-grow-1">
-                                        <div class="f-item f-container f-wrap-nowrap pa-sm">
-                                            <div>
-                                                <h2 class="title">{{ $annonce->titre }}</h2>
-                                                <div class="city pt-sm">
-                                                    <i class="fa fa-map-marker"></i>
-                                                    &nbsp;{{ $annonce->ville }}
-                                                </div>
-                                                <div class="f-grow-1 text-left pt-md">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    &nbsp;{{ $annonce->created_at->format('d M Y') }}
-                                                </div>
-                                                <p class="city pt-sm">{{ $annonce->description }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="f-container f-content-end pa-xs">
-                                            <button type="button" class="btn blue" onclick="window.location='{{ route('annonce.details', ['id' => $annonce->id]) }}'">Je suis intéressé</button>
-                                        </div>
+                                <div class="f-item f-md-50 text-center">
+                                    @if($user)
+                                    {{ $user->numero_telephone }}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="grey mt-xl">
+                        <div>
+                            <div class="block-input f-item">
+                                <label for="profil-new-phone" class="f-container area">
+                                    <div class="f-item f-md-50 text-center">
+                                        Nouveau numéro de téléphone
                                     </div>
-                                </div>
+                                    <div class="f-item f-md-50">
+                                        <input type="text" maxlength="20" id="profil-new-phone" name="numero_telephone" value="" />
+                                    </div>
+                                </label>
                             </div>
                         </div>
-                        @endforeach
-                        @else <p>Aucune annonce disponible pour cette catégorie.</p>
-                        @endif
                     </div>
-                </div>
+                    <div class="f-container f-content-center">
+                        <a href="" class="btn lg red f-item f-md-33 text-center ma-xs"><i class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
+                        <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs"><i class="fa fa-check"></i>&nbsp;Valider</button>
+                    </div>
+                </form>
             </div>
+
         </div>
         <div id="dbalpha"></div>
         <div id="dialogBoxContent"></div>
@@ -262,10 +259,13 @@
         <div class="page-bottom">
             <div class="container">
                 <div class="page-bottom-promote">
-                    <img class="logo f-align-self-center" width="200" height="85" src="{{ asset('assets\images\logo1icondonation.png') }}" /><br>
+                    <img class="logo f-align-self-center" width="200" height="85" src="imgs/logo1icondonation.png" loading="lazy" decoding="async" alt="" /><br>
                     <span class="pt-none mt-none ml-none"><span class="text-orange">Nous donnons des dons à toutes </span>
                         &nbsp;
                         <span class="text-blue-light">personnes étant dans le besoin</span></span>
+                </div>
+                <div class="page-bottom-illustrate">
+                    <small><b>Tabaraa..</b><br>&nbsp;&nbsp;&nbsp;&nbsp;Ne vous encombrez pas de choses qui ne servent plus, donnez ! Meubles, vêtements... Offrez une deuxième vie à vos objets inutilisés; même abîmés, ils peuvent encore servir. Donnons les objets qui nous encombrent depuis tant de temps pour faire le bonheur de quelqu'un.</small>
                 </div>
             </div>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -273,24 +273,33 @@
         <footer class="footer">
             <ul class="menu">
                 <li class="menu__item"><a class="menu__link" href="#">Accueil</a></li>
-                <li class="menu__item"><a class="menu__link" href="">Contact : Tabaraa.dz@gmail.com</a></li>
+                <li class="menu__item"><a class="menu__link" href="#">Contact </a></li>
+
             </ul>
             <p>&copy;2024 Tabaraa | Tous droits réservés</p>
         </footer>
     </div>
 
 
-    <script src="{{ asset('assets\js\script4.js') }}" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+
     <script>
         var $globals = {
             "API_Options": "{}",
             "API_Modules": "{}"
         };
     </script>
-    <script src="{{ asset('assets\js\script1.js') }}"></script>
-    <script src="{{ asset('assets\js\script2.js') }}"></script>
-    <script src="{{ asset('assets\js\script3.js') }}"></script>
-    <script src="{{ asset('assets\js\user.js') }}"></script>
+    <script src="script1.js"></script>
+    <script src="script2.js"></script>
+    <script src="script3.js"></script>
+    <script src="user.js"></script>
 </body>
 
 </html>

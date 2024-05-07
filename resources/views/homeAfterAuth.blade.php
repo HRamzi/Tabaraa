@@ -25,10 +25,10 @@
                     </div>
                     <div class="f-container">
                         <div class="f-align-self-start">
-                            <a class="f-container logo-picto" href="#" title="Site de don d'objets">
+                            <a class="f-container logo-picto" href="{{ route('userHome') }}" title="Site de don d'objets">
                                 <img class="logo f-align-self-center" height="20" width="20" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                             </a>
-                            <a class="f-container logo-full" href="#" title="Site de don d'objets">
+                            <a class="f-container logo-full" href="{{ route('userHome') }}" title="Site de don d'objets">
                                 <img class="logo f-align-self-center" height="50" width="100" src="{{ asset('assets\images\Tabaraalogo.svg') }}" loading="lazy" decoding="async" alt="Tabaraa" />
                             </a>
                         </div>
@@ -44,67 +44,71 @@
                     </div>
 
                     <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
-<button title="Ma messagerie" class="repliable ham-toggle btn-light position-relative" onclick="markAllMessagesAsRead()">
-    <a href="{{ route('messages') }}" class="text-decoration-none">
-        <span class="shell msgs-shell position-relative d-inline-block">
-            <i class="fa fa-envelope fa-lg position-relative d-block mx-auto"></i>
-            <span id="message-counter" class="badge badge-pill badge-primary bg-danger position-absolute top-0 start-100 translate-middle p-1"></span>
-        </span>
-    </a>
-</button>
+                        <button title="Ma messagerie" class="repliable ham-toggle btn-light position-relative" onclick="markAllMessagesAsRead()">
+                            <a href="{{ route('messages') }}" class="text-decoration-none">
+                                <span class="shell msgs-shell position-relative d-inline-block">
+                                    <i class="fa fa-envelope fa-lg position-relative d-block mx-auto"></i>
+                                    <span id="message-counter" class="badge badge-pill badge-primary bg-danger position-absolute top-0 start-100 translate-middle p-1"></span>
+                                </span>
+                            </a>
+                        </button>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assurez-vous d'inclure jQuery -->
+                        <script src="{{ asset('assets\js\jQuery.js') }}"></script> <!-- Assurez-vous d'inclure jQuery -->
 
-<script>
-    // Fonction pour marquer tous les messages comme lus
-  function markAllMessagesAsRead() {
-    $.ajax({
-        url: "{{ route('markAllMessagesAsRead') }}",
-        method: "POST",
-        success: function(data) {
-            console.log(data); // Ajoutez cette ligne pour afficher le résultat dans la console
-            if (data.success) {
-                // Mettre à jour le compteur de messages
-                $('#message-counter').text('').removeClass('show'); // Retire le compteur de messages
-            } else {
-                console.error('Erreur lors de la mise à jour des messages.');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
-}
-    // Fonction pour mettre à jour le compteur de messages
-    function updateMessageCounter() {
-        $.ajax({
-            url: "{{ route('getMessageCount') }}",
-            method: "GET",
-            success: function(data) {
-                if (data.count > 0) {
-                    $('#message-counter').text(data.count).addClass('show'); // Ajoute la classe 'show' si le compteur est supérieur à 0
-                } else {
-                    $('#message-counter').removeClass('show'); // Retire la classe 'show' si le compteur est égal à 0
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    }
+                        <script>
+                            // Fonction pour marquer tous les messages comme lus
+                            function markAllMessagesAsRead() {
+                                $.ajax({
+                                    url: "{{ route('markAllMessagesAsRead') }}",
+                                    method: "POST",
+                                    success: function(data) {
+                                        console.log(data); // Ajoutez cette ligne pour afficher le résultat dans la console
+                                        if (data.success) {
+                                            // Mettre à jour le compteur de messages
+                                            $('#message-counter').text('').removeClass('show'); // Retire le compteur de messages
+                                        } else {
+                                            console.error('Erreur lors de la mise à jour des messages.');
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(error);
+                                    }
+                                });
+                            }
+                            // Fonction pour mettre à jour le compteur de messages
+                            function updateMessageCounter() {
+                                $.ajax({
+                                    url: "{{ route('getMessageCount') }}",
+                                    method: "GET",
+                                    success: function(data) {
+                                        if (data.count > 0) {
+                                            $('#message-counter').text(data.count).addClass('show'); // Ajoute la classe 'show' si le compteur est supérieur à 0
+                                        } else {
+                                            $('#message-counter').removeClass('show'); // Retire la classe 'show' si le compteur est égal à 0
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error(error);
+                                    }
+                                });
+                            }
 
-    // Appeler la fonction pour mettre à jour le compteur au chargement de la page
-    $(document).ready(function() {
-        updateMessageCounter();
-    });
-</script>
+                            // Appeler la fonction pour mettre à jour le compteur au chargement de la page
+                            $(document).ready(function() {
+                                updateMessageCounter();
+                            });
+                        </script>
 
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">
                             <span class="shell">
                                 @php $utilisateur = auth()->user(); @endphp
-                                <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
+                                @if($utilisateur)
+                                    <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
+                                @else
+                                    <img src="{{ asset('assets\images\avatar.png') }}" loading="lazy" decoding="async" alt="Mon avatar">
+                                @endif
                             </span>
                         </button>
 
@@ -133,37 +137,39 @@
                     </div>  -->
 
                 </div>
-                <div class="f-container f-content-center spaced" id="global-search">
+                <d<div class="f-container f-content-center spaced" id="global-search">
                     <div class="f-item">
                         <div id="search-header-appbar">
                             <button id="close-search-header"><i class="fa fa-chevron-left"></i></button>
                             <span>Ma recherche</span>
                         </div>
-                        <div class="f-container pt-sm search-filter-zone text-sm">
-                            <div class="search-cell">
-                                <label for="search-header-keywords" class="search-input-label">Que recherchez-vous ?</label>
-                                <input class="select2" id="search-header-keywords" type="text" maxlength="20" placeholder="Table,Pull..." value="" />
-
-                            </div>
-                            <div class="search-cell">
-                                <label for="search-header-keywords" class="search-input-label">Sur quelle ville ?</label>
-                                <input class="select2" id="search-header-keywords" type="text" maxlength="50" placeholder="Tlemcen,Oran.." value="" />
-                                <!-- <span class="search-header-reset-keywords disabled"><i class="fa fa-close"></i></span> -->
-                            </div>
-                            <div class="search-cell">
-                                <button id="search-header-submit" class="search-valid search" data-target="#search-header-alert">
-                                    <i class="fa fa-search"></i>
-                                    <a href="{{ route('rechercher') }}">Rechercher</a>
-                                    <!-- <span class="search-header-nb-results"></span> -->
-                                    <div id="search-header-alert" class="text-xs text-center display-soft-none">
-                                        Veuillez sélectionner au moins un critère ci-dessus
+                        <form action="{{ route('rechercher') }}" method="POST">
+                            @csrf
+                            <div class="f-container pt-sm search-filter-zone text-sm">
+                                <div class="search-cell">
+                                    <label for="search-header-keywords" class="search-input-label">Que recherchez-vous ?</label>
+                                    <input class="select2" name="termes" id="search-header-keywords" type="text" maxlength="20" placeholder="Table,Pull..." value="" />
+                                </div>
+                                <div class="search-cell">
+                                    <label for="search-header-keywords" class="search-input-label">Sur quelle ville ?</label>
+                                    <input class="select2" name="ville" id="search-header-keywords" type="text" maxlength="50" placeholder="Tlemcen,Oran.." value="" />
+                                    <!-- <span class="search-header-reset-keywords disabled"><i class="fa fa-close"></i></span> -->
+                                </div>
+                                <div class="search-cell">
+                                    <button type="submit" id="search-header-submit" class="search-valid search" data-target="#search-header-alert">
+                                        <i class="fa fa-search"></i>
+                                        Rechercher
+                                        <!-- <span class="search-header-nb-results"></span> -->
+                                        <div id="search-header-alert" class="text-xs text-center display-soft-none">
+                                            Veuillez sélectionner au moins un critère ci-dessus
+                                        </div>
+                                    </button>
+                                    <div class="pt-sm text-center bloc_saved_search has-recherches display-none">
+                                        <button class="btn outline  open-saved-search">Mes recherches</button>
                                     </div>
-                                </button>
-                                <div class="pt-sm text-center bloc_saved_search has-recherches display-none">
-                                    <button class="btn outline  open-saved-search">Mes recherches</button>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <button id="global-search-close" class="icon-btn "><i class="fa fa-arrow-up"></i></button>
                 </div>
@@ -196,7 +202,7 @@
             href="{{ route('userAuth_vetement') }}" title="vetements">&nbsp; &nbsp;<i class="fa-sharp fa-solid fa-shirt fa-xl" style="color: #08680f;"></i>&nbsp; &nbsp;Vetements</a>
             href="{{ route('userAuth_livre') }}" title="medecines">&nbsp; &nbsp; <i class="fa-solid fa-house-medical fa-xl" style="color: #940537;"></i>&nbsp; &nbsp;Medecines</a>
             href="{{ route('userAuth_medecine') }}" title="Livres">&nbsp; &nbsp; <i class="fa-solid fa-book fa-xl" style="color: #572d05;"></i>&nbsp; &nbsp; &nbsp;Livres</a>
-            href="{{ route('userAuth_article_maison') }}" title="artice_maison">&nbsp; &nbsp; <i class="fa-solid fa-house-chimney fa-lg" style="color: #3c3b3f;"></i> &nbsp; &nbsp;Articles Maison</a>
+            href="{{ route('userAuth_articleMaison') }}" title="artice_maison">&nbsp; &nbsp; <i class="fa-solid fa-house-chimney fa-lg" style="color: #3c3b3f;"></i> &nbsp; &nbsp;Articles Maison</a>
             href="{{ route('userAuth_auto') }}" title="pieces_auto">&nbsp; &nbsp; <i class="fa-solid fa-car fa-xl" style="color: #354c73;"></i> &nbsp; &nbsp; Pièces Automobiles</a>
             href="{{ route('userAuth_autre') }}" title="autres">&nbsp; &nbsp; <i class="fa-brands fa-slack fa-xl" style="color: #3a2612;"></i>&nbsp; &nbsp;&nbsp; Autres</a>
 
@@ -246,28 +252,28 @@
                                     <div class="swiper-grid-content">
                                         <div id="swiper-category" class="swiper">
                                             <div class="swiper-wrapper">
-                                                <a class="home-category swiper-slide" href="{{ route('vetement') }}" title="Vêtements">
+                                                <a class="home-category swiper-slide" href="{{ route('userAuth_vetement') }}" title="Vêtements">
                                                     <img src="{{ asset('assets\images\VetementTabaraa.svg') }}" height="100" width="100">
                                                     <div class="infos">Vetements</div>
                                                 </a>
-                                                <a class="home-category swiper-slide" href="{{ route('medecine') }}" title="Medecines">
+                                                <a class="home-category swiper-slide" href="{{ route('userAuth_medecine') }}" title="Medecines">
                                                     <img src="{{ asset('assets\images\MedecineTabaraa.svg') }}" height="100" width="100">
                                                     <div class="infos">Medecines</div>
                                                 </a>
-                                                <a class="home-category swiper-slide" href="{{ route('article_maison') }}" title="artice_maison">
+                                                <a class="home-category swiper-slide" href="{{ route('userAuth_articleMaison') }}" title="artice_maison">
                                                     <img src="{{ asset('assets\images\ArticleMaisonTabaraa.svg') }}" height="100" width="100">
                                                     <div class="infos">Articles Maison</div>
                                                 </a>
-                                                <a class="home-category swiper-slide" href="{{ route('livre') }}" title="Livres">
+                                                <a class="home-category swiper-slide" href="{{ route('userAuth_livre') }}" title="Livres">
                                                     <img src="{{ asset('assets\images\LivresTabaraa.svg') }}" height="100" width="100">
                                                     <div class="infos">Livres</div>
                                                 </a>
 
-                                                <a class="home-category swiper-slide" href="{{ route('auto') }}" title="Pièces Automobiles">
+                                                <a class="home-category swiper-slide" href="{{ route('userAuth_auto') }}" title="Pièces Automobiles">
                                                     <img src="{{ asset('assets\images\AutoTabaraa.svg') }}" height="100" width="100">
                                                     <div class="infos">Pièces Automobiles</div>
                                                 </a>
-                                                <a class="home-category swiper-slide" href="{{ route('autre') }}" title="Autres">
+                                                <a class="home-category swiper-slide" href="{{ route('userAuth_autre') }}" title="Autres">
                                                     <img src="{{ asset('assets\images\AutreTabaraa.svg') }}" height="100" width="100">
                                                     <div class="infos">Autres</div>
                                                 </a>
@@ -289,18 +295,18 @@
                                         <div class="swiper">
                                             <div class="swiper-wrapper">
                                                 @if($vetements)
-                                                    @foreach($vetements as $annonce)
-                                                    <a class="home-suggest swiper-slide" href="{{ route('annonce.details', ['id' => $annonce->id]) }}" title="{{ $annonce->titre }}">
-                                                        <div class="cover">
-                                                            <img class="photo" src="{{ asset('storage/' . $annonce->photo) }}" alt="pantalon">
-                                                        </div>
-                                                        <div class="infos">
-                                                            <div class="title">{{ $annonce->titre }}</div>
-                                                            <div class="loc">{{ $annonce->ville }}</div>
-                                                            <div><i class="fa fa-clock-o"></i>&nbsp;{{ $annonce->created_at->format('d M Y') }}</div>
-                                                        </div>
-                                                    </a>
-                                                    @endforeach
+                                                @foreach($vetements as $annonce)
+                                                <a class="home-suggest swiper-slide" href="{{ route('annonce.details', ['id' => $annonce->id]) }}" title="{{ $annonce->titre }}">
+                                                    <div class="cover">
+                                                        <img class="photo" src="{{ asset('storage/' . $annonce->photo) }}" alt="pantalon">
+                                                    </div>
+                                                    <div class="infos">
+                                                        <div class="title">{{ $annonce->titre }}</div>
+                                                        <div class="loc">{{ $annonce->ville }}</div>
+                                                        <div><i class="fa fa-clock-o"></i>&nbsp;{{ $annonce->created_at->format('d M Y') }}</div>
+                                                    </div>
+                                                </a>
+                                                @endforeach
                                                 @else
                                                 <p>Aucune annonce disponible pour cette catégorie.</p>
                                                 @endif
@@ -327,18 +333,18 @@
                                         <div class="swiper">
                                             <div class="swiper-wrapper">
                                                 @if($medecine)
-                                                    @foreach($medecine as $annonce)
-                                                    <a class="home-suggest swiper-slide" href="{{ route('annonce.details', ['id' => $annonce->id]) }}" title="{{ $annonce->titre }}">
-                                                        <div class="cover">
-                                                            <img class="photo" src="{{ asset('storage/' . $annonce->photo) }}" alt="Concentrateur">
-                                                        </div>
-                                                        <div class="infos">
-                                                            <div class="title">{{ $annonce->titre }}</div>
-                                                            <div class="loc">{{ $annonce->ville }}</div>
-                                                            <div><i class="fa fa-clock-o"></i>&nbsp;{{ $annonce->created_at->format('d M Y') }}</div>
-                                                        </div>
-                                                    </a>
-                                                    @endforeach
+                                                @foreach($medecine as $annonce)
+                                                <a class="home-suggest swiper-slide" href="{{ route('annonce.details', ['id' => $annonce->id]) }}" title="{{ $annonce->titre }}">
+                                                    <div class="cover">
+                                                        <img class="photo" src="{{ asset('storage/' . $annonce->photo) }}" alt="Concentrateur">
+                                                    </div>
+                                                    <div class="infos">
+                                                        <div class="title">{{ $annonce->titre }}</div>
+                                                        <div class="loc">{{ $annonce->ville }}</div>
+                                                        <div><i class="fa fa-clock-o"></i>&nbsp;{{ $annonce->created_at->format('d M Y') }}</div>
+                                                    </div>
+                                                </a>
+                                                @endforeach
                                                 @else
                                                 <p>Aucune annonce disponible pour cette catégorie.</p>
                                                 @endif
@@ -364,18 +370,18 @@
                                         <div class="swiper">
                                             <div class="swiper-wrapper">
                                                 @if($autre)
-                                                    @foreach($autre as $annonce)
-                                                    <a class="home-suggest swiper-slide" href="{{ route('annonce.details', ['id' => $annonce->id]) }}" title="{{ $annonce->titre }}">
-                                                        <div class="cover">
-                                                            <img class="photo" src="{{ asset('storage/' . $annonce->photo) }}">
-                                                        </div>
-                                                        <div class="infos">
-                                                            <div class="title">{{ $annonce->titre }}</div>
-                                                            <div class="loc">{{ $annonce->ville }}</div>
-                                                            <div><i class="fa fa-clock-o"></i>&nbsp;{{ $annonce->created_at->format('d M Y') }}</div>
-                                                        </div>
-                                                    </a>
-                                                    @endforeach
+                                                @foreach($autre as $annonce)
+                                                <a class="home-suggest swiper-slide" href="{{ route('annonce.details', ['id' => $annonce->id]) }}" title="{{ $annonce->titre }}">
+                                                    <div class="cover">
+                                                        <img class="photo" src="{{ asset('storage/' . $annonce->photo) }}">
+                                                    </div>
+                                                    <div class="infos">
+                                                        <div class="title">{{ $annonce->titre }}</div>
+                                                        <div class="loc">{{ $annonce->ville }}</div>
+                                                        <div><i class="fa fa-clock-o"></i>&nbsp;{{ $annonce->created_at->format('d M Y') }}</div>
+                                                    </div>
+                                                </a>
+                                                @endforeach
                                                 @else
                                                 <p>Aucune annonce disponible pour cette catégorie.</p>
                                                 @endif

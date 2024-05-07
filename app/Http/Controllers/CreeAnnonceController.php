@@ -21,7 +21,7 @@ class CreeAnnonceController extends Controller
             return redirect('/connexion')->with('error', 'Vous devez être connecté pour créer une annonce.');
         }
     }
-    
+
 
     public function store(Request $request)
     {
@@ -69,50 +69,74 @@ class CreeAnnonceController extends Controller
 
     public function recherche(Request $request)
     {
+        // Validation des données d'entrée
+        $request->validate([
+            'termes' => 'required|string|max:255',
+            'ville' => 'nullable|string|max:255',
+        ]);
         $termes = $request->input('termes');
+        $ville = $request->input('ville');
+        try {
+            // Appel de la méthode de recherche dans le modèle Annonce
+            $annoncesQuery = Annonce::query();
+            // Recherche par termes
+            if ($termes) {
+                $annoncesQuery->where(function ($query) use ($termes) {
+                    $query->where('titre', 'like', "%$termes%")
+                        ->orWhere('description', 'like', "%$termes%");
+                });
+            }
+            // Recherche par ville
+            if ($ville) {
+                $annoncesQuery->where('ville', 'like', "%$ville%");
+            }
 
-        // Appel de la méthode de recherche dans le modèle Annonce
-        $annonces = Annonce::rechercher($termes);
+            // Exécuter la requête et récupérer les résultats
+            $annonces = $annoncesQuery->get();
 
-        // Retourner les résultats à la vue
-        return view('annonces.recherche', compact('annonces'));
+            // Retourner les résultats à la vue
+            return view('annonces.recherche', compact('annonces'));
+        } catch (\Exception $e) {
+            // Gestion des erreurs
+            return back()->withError('Une erreur s\'est produite lors de la recherche.');
+        }
     }
 
     public function formulaireModifierAnnonce(Annonce $annonce)
-{
-    $annonce = Annonce::findOrFail($annonce->id);
-    $categories = Categorie::all();
-    
-    return view('annonces.formulaireModifierAnnonce', compact('annonce', 'categories'));
-}
+    {
+        $annonce = Annonce::findOrFail($annonce->id);
+        $categories = Categorie::all();
 
-public function modifierAnnonce(Request $request, Annonce $annonce)
-{
-    $request->validate([
-        'titre' => 'required|string|max:255|filled',
-        'ville' => 'required|string|max:255',
-        'numero_telephone' => 'required|string|max:20',
-        'description' => 'required|string',
-        'photo' => 'image|max:2048', // Ne pas rendre la photo obligatoire pour la modification
-    ], [
-        'titre.required' => 'Le titre est requis.',
-        'titre.filled' => 'Le titre ne peut pas être vide.',
-        'numero_telephone.required' => 'Le numéro de téléphone ne peut pas être vide.',
-        'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
-        'description.required' => 'La description est requis.',
-        'description.filled' => 'La description ne peut pas être vide.',
-    ]);
-
-    // Mettre à jour les champs sauf la photo
-    $annonce->update($request->except('photo'));
-    
-    if ($request->hasFile('photo')) {
-        $photoPath = $request->file('photo')->store('uploads', 'public');
-        $annonce->update(['photo' => $photoPath]);
+        return view('annonces.formulaireModifierAnnonce', compact('annonce', 'categories'));
     }
 
-    return redirect('/user-home')->with('success', 'Annonce mise à jour avec succès.');
-}
+    public function modifierAnnonce(Request $request, Annonce $annonce)
+    {
+        $request->validate([
+            'titre' => 'required|string|max:255|filled',
+            'ville' => 'required|string|max:255',
+            'numero_telephone' => 'required|string|max:20',
+            'description' => 'required|string',
+            'photo' => 'image|max:2048', // Ne pas rendre la photo obligatoire pour la modification
+        ], [
+            'titre.required' => 'Le titre est requis.',
+            'titre.filled' => 'Le titre ne peut pas être vide.',
+            'numero_telephone.required' => 'Le numéro de téléphone ne peut pas être vide.',
+            'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
+            'description.required' => 'La description est requis.',
+            'description.filled' => 'La description ne peut pas être vide.',
+        ]);
+
+        // Mettre à jour les champs sauf la photo
+        $annonce->update($request->except('photo'));
+
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('uploads', 'public');
+            $annonce->update(['photo' => $photoPath]);
+        }
+
+        return redirect('/user-home')->with('success', 'Annonce mise à jour avec succès.');
+    }
 
     public function supprimerAnnonce($id)
     {
@@ -120,5 +144,4 @@ public function modifierAnnonce(Request $request, Annonce $annonce)
         $annonce->delete();
         return redirect('mesAnnonces')->with('success', 'Annonce supprimée avec succès.');
     }
-
 }
