@@ -68,40 +68,48 @@ class CreeAnnonceController extends Controller
     }
 
     public function recherche(Request $request)
-    {
-        // Validation des données d'entrée
-        $request->validate([
-            'termes' => 'required|string|max:255',
-            'ville' => 'nullable|string|max:255',
-        ]);
-        $termes = $request->input('termes');
-        $ville = $request->input('ville');
-        try {
-            // Appel de la méthode de recherche dans le modèle Annonce
-            $annoncesQuery = Annonce::query();
-            // Recherche par termes
-            if ($termes) {
-                $annoncesQuery->where(function ($query) use ($termes) {
-                    $query->where('titre', 'like', "%$termes%")
-                        ->orWhere('description', 'like', "%$termes%");
-                });
-            }
-            // Recherche par ville
-            if ($ville) {
-                $annoncesQuery->where('ville', 'like', "%$ville%");
-            }
+{
+    // Validation des données d'entrée
+    $request->validate([
+        'termes' => 'nullable|string|max:255',
+        'ville' => 'nullable|string|max:255',
+    ]);
 
-            // Exécuter la requête et récupérer les résultats
-            $annonces = $annoncesQuery->get();
+    $termes = $request->input('termes');
+    $ville = $request->input('ville');
 
-            // Retourner les résultats à la vue
-            return view('annonces.recherche', compact('annonces'));
-        } catch (\Exception $e) {
-            // Gestion des erreurs
-            return back()->withError('Une erreur s\'est produite lors de la recherche.');
+    try {
+        // Appel de la méthode de recherche dans le modèle Annonce
+        $annoncesQuery = Annonce::query();
+
+        // Recherche par termes si spécifiés
+        if ($termes) {
+            $annoncesQuery->where(function ($query) use ($termes) {
+                $query->where('titre', 'like', "%$termes%")
+                    ->orWhere('description', 'like', "%$termes%");
+            });
         }
-    }
 
+        // Recherche par ville si spécifiée
+        if ($ville) {
+            if ($termes) {
+                $annoncesQuery->where('ville', 'like', "%$ville%");
+            } else {
+                // Si aucun terme n'est spécifié, rechercher uniquement par ville
+                $annoncesQuery->where('ville', '=', $ville);
+            }
+        }
+
+        // Exécuter la requête et récupérer les résultats
+        $annonces = $annoncesQuery->get();
+
+        // Retourner les résultats à la vue
+        return view('annonces.recherche', compact('annonces'));
+    } catch (\Exception $e) {
+        // Gestion des erreurs
+        return back()->withError('Une erreur s\'est produite lors de la recherche.');
+    }
+}
     public function formulaireModifierAnnonce(Annonce $annonce)
     {
         $annonce = Annonce::findOrFail($annonce->id);

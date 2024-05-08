@@ -237,8 +237,8 @@
         <footer class="footer">
 
             <ul class="menu">
-                <li class="menu__item"><a class="menu__link" href="index6.html">Accueil</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact</a></li>
             </ul>
             <p>&copy;2024 Tabaraa | Tous droits réservés</p>
         </footer>

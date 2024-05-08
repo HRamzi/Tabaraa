@@ -253,10 +253,7 @@
     <div id="layoutSidenav_nav">
         <nav class="sb-sidenav">
             <div class="sb-sidenav-menu">
-                <a class="nav-link" href="{{ route('admin.home') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    <span>Tableau de bord</span>
-                </a>
+               
                 <a class="nav-link" href="{{ route('admin.users.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                     Utilisateurs

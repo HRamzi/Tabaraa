@@ -30,7 +30,17 @@ class ProfileController extends Controller
 
     public function afficherFormulaireModifierNumeroTelephone(){
         $user = auth()->user();
-        return view('profileSettings.numTelephone', compact('user'));
+        return view('profileSettings.numTelephone');
+    }
+
+    public function checkPhoneNumber(Request $request)
+    {
+        $numeroTelephone = $request->input('numero_telephone_actuel');
+
+        // Vérifie si le numéro de téléphone existe dans la base de données
+        $exists = Utilisateur::where('numero_telephone', $numeroTelephone)->exists();
+
+        return response()->json(['exists' => $exists]);
     }
 
     public function modifierNumeroTelephone(Request $request)
@@ -43,26 +53,15 @@ class ProfileController extends Controller
         // Logique pour modifier le numéro de téléphone de l'utilisateur
         $user = auth()->user();
         $user->numero_telephone = $request->input('nouveau_numero_telephone');
-        $user->Utilisateur::save();
+        $user-> Utilisateur::save();
 
         return redirect()->back()->with('success', 'Numéro de téléphone mis à jour avec succès.');
     }
 
-
-    public function modifierEmail(Request $request)
-    {
-        // Valider les données du formulaire
-        $request->validate([
-            'nouvel_email' => 'required|string|email|max:255|unique:users,email',
-        ]);
-
-        // Logique pour modifier l'email de l'utilisateur
+    public function afficherModifierMotDePasse(){
         $user = auth()->user();
-        $user->email = $request->input('nouvel_email');
-        $user->Utilisateur::save();
-        return redirect()->back()->with('success', 'Email mis à jour avec succès.');
+        return view('profileSettings.modifierMotPasse');
     }
-
     public function modifierMotDePasse(Request $request)
     {
         // Valider les données du formulaire
@@ -77,6 +76,10 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Mot de passe mis à jour avec succès.');
     }
 
+    public function afficherSupprimerCompte(){
+        $user = auth()->user();
+        return view('profileSettings.suppCompte');
+    }
     public function supprimerCompte()
     {
         // Logique pour supprimer le compte de l'utilisateur

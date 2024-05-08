@@ -217,7 +217,7 @@
                 <div class="info">
                     <ul>
                         <li><span class="text-weight-bold">Veuillez noter que si vous supprimez votre compte, toutes vos données personnelles seront supprimées.</span></li>
-                        <li><span class="text-weight-bold">Votre profil, vos discussions, vos annonces seront effacés.</span></li>
+                        <li><span class="text-weight-bold">Votre profile, vos discussions, vos annonces seront effacés.</span></li>
                     </ul>
                 </div>
                 <div>
@@ -227,7 +227,7 @@
                         </div>
 
                         <div class="f-item f-md-50 text-right pa-md">
-                            <form method="post" action="">
+                            <form action="{{ route('supprimerCompte') }}" method="post">
                                 <input type="hidden" name="del_token">
                                 <button class="btn blue" type="submit" name="delete" value="1"><i class="fa fa-user-times"></i>Supprimer mon compte</button>
                             </form>
@@ -244,7 +244,7 @@
         <div class="page-bottom">
             <div class="container">
                 <div class="page-bottom-promote">
-                    <img class="logo f-align-self-center" width="200" height="85" src="imgs/logo1icondonation.png" loading="lazy" decoding="async" alt="" /> <br>
+                    <img class="logo f-align-self-center" width="200" height="85" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="" /> <br>
                     <span class="pt-none mt-none ml-none"><span class="text-orange">Nous donnons des dons à toutes </span>
                         &nbsp;
                         <span class="text-blue-light">personnes étant dans le besoin</span></span>

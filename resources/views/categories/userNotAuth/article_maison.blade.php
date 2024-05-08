@@ -158,7 +158,7 @@
                                             </div>
                                         </div>
                                         <div class="f-container f-content-end pa-xs">
-                                            <button type="button" onclick="window.location='{{ route('annonce.details', ['id' => $annonce->id]) }}'">Cliquez-moi pour rediriger</button>
+                                            <button type="button" onclick="window.location='{{ route('annonces.details', ['id' => $annonce->id]) }}'">Cliquez-moi pour rediriger</button>
                                         </div>                                        
                                     </div>
                                 </div>

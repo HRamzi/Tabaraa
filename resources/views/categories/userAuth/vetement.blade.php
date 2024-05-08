@@ -245,7 +245,7 @@
                                             </div>
                                         </div>
                                         <div class="f-container f-content-end pa-xs">
-                                            <button type="button" class="btn blue" onclick="window.location='{{ route('annonce.details', ['id' => $annonce->id]) }}'">Je suis intéressé</button>
+                                            <button type="button" class="btn blue" onclick="window.location='{{ route('annonces.details', ['id' => $annonce->id]) }}'">Je suis intéressé</button>
                                         </div>
                                     </div>
                                 </div>

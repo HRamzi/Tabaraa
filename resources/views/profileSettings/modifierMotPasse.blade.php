@@ -23,19 +23,20 @@
     <div class="global-shadow"></div>
     <div class="deco-bg">
         <div class="container main-bg">
-            <h1 class="rep"><i class="fa fa-envelope-o mr-xs"></i>Modification nom d'utilisateur</h1>
+            <h1 class="rep"><i class="fa fa-envelope-o mr-xs"></i>Modification d'utilisateur</h1>
             <div class="panel pa-xl ma-xs">
-                <form action="{{ route('modifier_numero_telephone') }}" method="post" class="custom-form f-item pa-xs">
+                <form action="{{ route('modifier_mot_de_passe') }}" method="post" class="custom-form f-item pa-xs">
                     @csrf
                     <div class="grey mt-xl">
                         <div>
                             <div class="block-input f-item">
                                 <label for="profil-actuel-phone" class="f-container area">
                                     <div class="f-item f-md-50 text-center">
-                                        Numéro de téléphone Actuel
+                                        Mot de passe Actuel
                                     </div>
                                     <div class="f-item f-md-50">
-                                        <input type="text" maxlength="20" id="profil-actuel-phone" name="numero_telephone_actuel" value="" pattern="0(5|6|7)[0-9]{8}" required oninput="verifierNumeroTelephone(this)" />
+                                        <input type="password" maxlength="20" id="profil-actuel-phone" name="mot_de_passe_actuel" value="" required oninput="verifierNumeroTelephone(this)" />
+                                        <span class="text-danger">@error('mot_de_passe') {{ $message }} @enderror</span>
                                     </div>
                                 </label>
                             </div>
@@ -46,10 +47,10 @@
                             <div class="block-input f-item">
                                 <label for="profil-new-phone" class="f-container area">
                                     <div class="f-item f-md-50 text-center">
-                                        Nouveau numéro de téléphone
+                                        Nouveau mot de passe
                                     </div>
                                     <div class="f-item f-md-50">
-                                        <input type="text" maxlength="20" id="profil-new-phone" name="nouveau_numero_telephone" value="" pattern="0(5|6|7)[0-9]{8}" required disabled />
+                                        <input type="password" maxlength="20" id="profil-new-phone" name="nouveau_mot_de_passe" value="" required disabled />
                                     </div>
                                 </label>
                             </div>

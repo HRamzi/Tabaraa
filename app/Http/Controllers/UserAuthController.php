@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 use App\Models\Utilisateur;
-use App\Models\Annonce;
 
 class UserAuthController extends Controller
 {
@@ -72,7 +68,7 @@ class UserAuthController extends Controller
         }
     }
 
-    public function afficherFormulaireConnexion(Request $request)
+    public function afficherFormulaireConnexion()
     {
         return view("auth.connexion");
     }
@@ -89,14 +85,22 @@ class UserAuthController extends Controller
         }
 
         Auth::login($user);
-        return redirect('/user-home');
+        session(['user' => Auth::user()]);
+
+        // Redirection en fonction du rôle de l'utilisateur
+        if ($user->role === 'admin') {
+            return redirect('/admin-home');
+        } else {
+            return redirect('/user-home');
+        }
     }
 
     public function deconnexion(Request $request)
     {
-        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        Auth::logout();
+        session()->forget('user');
 
         return redirect('home')->with('success', 'Vous avez été déconnecté avec succès.');
     }

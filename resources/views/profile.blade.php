@@ -12,101 +12,7 @@
 
 <body id="page-profil">
     <header class="tabaraa-header">
-        <div class="head-top"></div>
-        <div class="toolsbar-dummy"></div>
-        <div class="toolsbar f-container f-align-stretch">
-            <div class="limiter-large">
-                <div class="f-container f-wrap-nowrap f-item" id="main-appbar">
-                    <div class="mq-sm-hidden">
-                        <button title="Menu" class="repliable ham-toggle" data-target="nav-global">
-                            <span class="shell global-shell">
-                                <i class="fa fa-bars fa-lg"></i>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="f-container">
-                        <div class="f-align-self-start">
-                            <a class="f-container logo-picto" href="{{ route('userHome') }}" title="Site de don d'objets">
-                                <img class="logo f-align-self-center" height="20" width="20" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="Tabaraa" />
-                            </a>
-                            <a class="f-container logo-full" href="{{ route('userHome') }}" title="Site de don d'objets">
-                                <img class="logo f-align-self-center" height="50" width="100" src="{{ asset('assets\images\Tabaraalogo.svg') }}" loading="lazy" decoding="async" alt="Tabaraa" />
-                            </a>
-                        </div>
-                    </div>
-                    <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-center ">
-                        <div class="header-search f-content-between" id="header-search-loc">
-                            <span class="header-search-resume">
-                                <span class="header-search-resume-emphasis">Rechercher un don...</span>
-                                <span class="header-search-resume-secondary"></span>
-                            </span>
-                            <button type="button" aria-label="Recherche"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
-
-                        <button title="Ma messagerie" class="repliable ham-toggle" data-target="nav-mails">
-                            <a href="{{ route('messages') }}">
-                                <span class="shell msgs-shell">
-                                    <i class="fa fa-envelope fa-lg"></i>
-                                </span>
-                            </a>
-                        </button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">
-                            <span class="shell">
-                                @php $utilisateur = auth()->user(); @endphp
-                                @if($utilisateur)
-                                    <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
-                                @else
-                                    <img src="{{ asset('assets\images\avatar.png') }}" loading="lazy" decoding="async" alt="Mon avatar">
-                                @endif
-                            </span>
-                        </button>
-
-                    </div>
-
-                </div>
-                <div class="f-container f-content-center spaced" id="global-search">
-                    <div class="f-item">
-                        <div id="search-header-appbar">
-                            <button id="close-search-header"><i class="fa fa-chevron-left"></i></button>
-                            <span>Ma recherche</span>
-                        </div>
-                        <form action="{{ route('rechercher') }}" method="POST">
-                            @csrf
-                            <div class="f-container pt-sm search-filter-zone text-sm">
-                                <div class="search-cell">
-                                    <label for="search-header-keywords" class="search-input-label">Que recherchez-vous ?</label>
-                                    <input class="select2" name="termes" id="search-header-keywords" type="text" maxlength="20" placeholder="Table,Pull..." value="" />
-                                </div>
-                                <div class="search-cell">
-                                    <label for="search-header-keywords" class="search-input-label">Sur quelle ville ?</label>
-                                    <input class="select2" name="ville" id="search-header-keywords" type="text" maxlength="50" placeholder="Tlemcen,Oran.." value="" />
-                                    <!-- <span class="search-header-reset-keywords disabled"><i class="fa fa-close"></i></span> -->
-                                </div>
-                                <div class="search-cell">
-                                    <button type="submit" id="search-header-submit" class="search-valid search" data-target="#search-header-alert">
-                                        <i class="fa fa-search"></i>
-                                        Rechercher
-                                        <!-- <span class="search-header-nb-results"></span> -->
-                                        <div id="search-header-alert" class="text-xs text-center display-soft-none">
-                                            Veuillez sélectionner au moins un critère ci-dessus
-                                        </div>
-                                    </button>
-                                    <div class="pt-sm text-center bloc_saved_search has-recherches display-none">
-                                        <button class="btn outline  open-saved-search">Mes recherches</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <button id="global-search-close" class="icon-btn "><i class="fa fa-arrow-up"></i></button>
-                </div>
-            </div>
-        </div>
+        @include('components.userAuth.header')
     </header>
     <div class="ham-nav ham-right" id="nav-user" data-icon="user" data-title="profil">
         <div class="title"><i class="fa fa-user"></i>
@@ -154,9 +60,9 @@
                             </div>
 
                             <a href="{{ route('mesAnnonces') }}" class="btn f-item" title="Mes annonces"><i class="fa fa-archive"></i><span class="label">Mes annonces</span></a>
-                            <a href="{{ route('mesAnnonces') }}" class="btn f-item" title="Modifier_Numero_Telephone"><i class="fa fa-user"></i><span class="label">Modifier Numéro Telephone</span></a>
-                            <a href="{{ route('mesAnnonces') }}" class="btn f-item" title="Modifier_mot_de_passe"><i class="fa fa-lock"></i><span class="label">Modifier mot de passe</span></a>
-                            <a href="{{ route('mesAnnonces') }}" class="btn f-item suppression-compte" title="Supprimer_mon_compte"><i class="fa fa-user-times"></i><span class="label">Supprimer mon compte</span></a>
+                            <a href="{{ route('afficher_modifier_numero_telephone') }}" class="btn f-item" title="Modifier_Numero_Telephone"><i class="fa fa-user"></i><span class="label">Modifier Numéro Telephone</span></a>
+                            <a href="{{ route('afficher_modifier_mot_de_passe') }}" class="btn f-item" title="Modifier_mot_de_passe"><i class="fa fa-lock"></i><span class="label">Modifier mot de passe</span></a>
+                            <a href="{{ route('afficher_supprimer_Compte') }}" class="btn f-item suppression-compte" title="Supprimer_mon_compte"><i class="fa fa-user-times"></i><span class="label">Supprimer mon compte</span></a>
                             <br><br>
                             <div class="f-container f-item  f-wrap-nowrap  mt-md">
                                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;

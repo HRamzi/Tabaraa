@@ -1,0 +1,164 @@
+<div class="head-top"></div>
+<div class="toolsbar-dummy"></div>
+<div class="toolsbar f-container f-align-stretch">
+    <div class="limiter-large">
+        <div class="f-container f-wrap-nowrap f-item" id="main-appbar">
+            <div class="mq-sm-hidden">
+                <button title="Menu" class="repliable ham-toggle" data-target="nav-global">
+                    <span class="shell global-shell">
+                        <i class="fa fa-bars fa-lg"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="f-container">
+                <div class="f-align-self-start">
+                    <a class="f-container logo-picto" href="{{ route('userHome') }}" title="Site de don d'objets">
+                        <img class="logo f-align-self-center" height="20" width="20" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="Tabaraa" />
+                    </a>
+                    <a class="f-container logo-full" href="{{ route('userHome') }}" title="Site de don d'objets">
+                        <img class="logo f-align-self-center" height="50" width="100" src="{{ asset('assets\images\Tabaraalogo.svg') }}" loading="lazy" decoding="async" alt="Tabaraa" />
+                    </a>
+                </div>
+            </div>
+            <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-center ">
+                <div class="header-search f-content-between" id="header-search-loc">
+                    <span class="header-search-resume">
+                        <span class="header-search-resume-emphasis">Rechercher un don...</span>
+                        <span class="header-search-resume-secondary"></span>
+                    </span>
+                    <button type="button" aria-label="Recherche"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
+                <button title="Ma messagerie" class="repliable ham-toggle btn-light position-relative" onclick="markAllMessagesAsRead()">
+                    <a href="{{ route('messages') }}" class="text-decoration-none">
+                        <span class="shell msgs-shell position-relative d-inline-block">
+                            <i class="fa fa-envelope fa-lg position-relative d-block mx-auto"></i>
+                            <span id="message-counter" class="badge badge-pill badge-primary bg-danger position-absolute top-0 start-100 translate-middle p-1"></span>
+                        </span>
+                    </a>
+                </button>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assurez-vous d'inclure jQuery -->
+
+                <script>
+                    // Fonction pour marquer tous les messages comme lus
+                    function markAllMessagesAsRead() {
+                        $.ajax({
+                            url: "{{ route('markAllMessagesAsRead') }}",
+                            method: "POST",
+                            success: function(data) {
+                                console.log(data); // Ajoutez cette ligne pour afficher le résultat dans la console
+                                if (data.success) {
+                                    // Mettre à jour le compteur de messages
+                                    $('#message-counter').text('').removeClass('show'); // Retire le compteur de messages
+                                } else {
+                                    console.error('Erreur lors de la mise à jour des messages.');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+                    // Fonction pour mettre à jour le compteur de messages
+                    function updateMessageCounter() {
+                        $.ajax({
+                            url: "{{ route('getMessageCount') }}",
+                            method: "GET",
+                            success: function(data) {
+                                if (data.count > 0) {
+                                    $('#message-counter').text(data.count).addClass('show'); // Ajoute la classe 'show' si le compteur est supérieur à 0
+                                } else {
+                                    $('#message-counter').removeClass('show'); // Retire la classe 'show' si le compteur est égal à 0
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+
+                    // Appeler la fonction pour mettre à jour le compteur au chargement de la page
+                    $(document).ready(function() {
+                        updateMessageCounter();
+                    });
+                </script>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">
+                    <span class="shell">
+                        @php $utilisateur = auth()->user(); @endphp
+                        @if($utilisateur)
+                            <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
+                        @else
+                        <img src="{{ asset('assets\images\avatar.png') }}" loading="lazy" decoding="async" alt="Mon avatar">
+                        @endif
+                    </span>
+                </button>
+
+            </div>
+
+            <!-- <div class="f-grow-1 f-container f-wrap-nowrap f-align-end f-content-end">
+                    <div class="mq-sm-visible">
+                        <div class="f-container f-align-center">
+                            
+                            <button title="Ma messagerie" class="repliable ham-toggle" data-target="nav-mails">
+                                <a href="message.html">
+                                    <span class="shell msgs-shell">
+                                    <i class="fa fa-envelope fa-lg"></i>
+                                </span>
+                                </a>
+                            </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                            <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">
+                                <span class="shell">
+                                    <img src="avatar.png" loading="lazy" decoding="async" alt="Mon avatar">
+                                </span>
+                            </button>
+                        </div>
+                    </div>                   
+                </div>  -->
+
+        </div>
+        <div class="f-container f-content-center spaced" id="global-search">
+            <div class="f-item">
+                <div id="search-header-appbar">
+                    <button id="close-search-header"><i class="fa fa-chevron-left"></i></button>
+                    <span>Ma recherche</span>
+                </div>
+                <form action="{{ route('rechercher') }}" method="POST">
+                    @csrf
+                    <div class="f-container pt-sm search-filter-zone text-sm">
+                        <div class="search-cell">
+                            <label for="search-header-keywords" class="search-input-label">Que recherchez-vous ?</label>
+                            <input class="select2" name="termes" id="search-header-keywords" type="text" maxlength="20" placeholder="Table,Pull..." value="" />
+                        </div>
+                        <div class="search-cell">
+                            <label for="search-header-keywords" class="search-input-label">Sur quelle ville ?</label>
+                            <input class="select2" name="ville" id="search-header-keywords" type="text" maxlength="50" placeholder="Tlemcen,Oran.." value="" />
+                            <!-- <span class="search-header-reset-keywords disabled"><i class="fa fa-close"></i></span> -->
+                        </div>
+                        <div class="search-cell">
+                            <button type="submit" id="search-header-submit" class="search-valid search" data-target="#search-header-alert">
+                                <i class="fa fa-search"></i>
+                                Rechercher
+                                <!-- <span class="search-header-nb-results"></span> -->
+                                <div id="search-header-alert" class="text-xs text-center display-soft-none">
+                                    Veuillez sélectionner au moins un critère ci-dessus
+                                </div>
+                            </button>
+                            <div class="pt-sm text-center bloc_saved_search has-recherches display-none">
+                                <button class="btn outline  open-saved-search">Mes recherches</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <button id="global-search-close" class="icon-btn "><i class="fa fa-arrow-up"></i></button>
+        </div>
+    </div>
+</div>
