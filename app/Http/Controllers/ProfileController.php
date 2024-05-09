@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Annonce;
 use App\Models\Utilisateur;
 
@@ -28,21 +29,28 @@ class ProfileController extends Controller
         return view('mesAnnonces', compact('annonces'));
     }
 
-    public function afficherFormulaireModifierNumeroTelephone(){
+    public function afficherFormulaireModifierNumeroTelephone()
+    {
         $user = auth()->user();
         return view('profileSettings.numTelephone');
     }
-
-    public function checkPhoneNumber(Request $request)
+    public function verifierNumeroTelephone(Request $request)
     {
         $numeroTelephone = $request->input('numero_telephone_actuel');
 
-        // Vérifie si le numéro de téléphone existe dans la base de données
-        $exists = Utilisateur::where('numero_telephone', $numeroTelephone)->exists();
+        $user = auth()->user();
+
+        // Vérifier si l'utilisateur existe et si son numéro de téléphone correspond à celui envoyé
+        if ($user->numero_telephone == $numeroTelephone) {
+            // Le numéro de téléphone correspond à celui de l'utilisateur
+            $exists = true;
+        } else {
+            // Le numéro de téléphone ne correspond pas à celui de l'utilisateur
+            $exists = false;
+        }
 
         return response()->json(['exists' => $exists]);
     }
-
     public function modifierNumeroTelephone(Request $request)
     {
         // Valider les données du formulaire
@@ -53,12 +61,13 @@ class ProfileController extends Controller
         // Logique pour modifier le numéro de téléphone de l'utilisateur
         $user = auth()->user();
         $user->numero_telephone = $request->input('nouveau_numero_telephone');
-        $user-> save();
+        $user->Utilisateur::save();
 
         return redirect()->back()->with('success', 'Numéro de téléphone mis à jour avec succès.');
     }
 
-    public function afficherModifierMotDePasse(){
+    public function afficherModifierMotDePasse()
+    {
         $user = auth()->user();
         return view('profileSettings.modifierMotPasse');
     }
@@ -72,11 +81,12 @@ class ProfileController extends Controller
         // Logique pour modifier le mot de passe de l'utilisateur
         $user = auth()->user();
         $user->password = bcrypt($request->input('nouveau_mot_de_passe'));
-        $user->save();
+        $user->Utilisateur::save();
         return redirect()->back()->with('success', 'Mot de passe mis à jour avec succès.');
     }
 
-    public function afficherSupprimerCompte(){
+    public function afficherSupprimerCompte()
+    {
         $user = auth()->user();
         return view('profileSettings.suppCompte');
     }

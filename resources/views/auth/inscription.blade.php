@@ -4,6 +4,8 @@
 <head>
     <link rel="preload" as="font" href="/fonts/fontawesome-webfont.woff2?v=4.7.0" type="font/woff2" crossorigin />
     <link rel="preload" as="font" href="/fonts/icomoon4.woff2" type="font/woff2" crossorigin />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{ asset('assets\js\sweetAlert.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link href="{{ asset('assets\css\styles.css') }}" rel="stylesheet" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}" />
@@ -187,6 +189,25 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            function showSuccessMessage() {
+                var data = {
+                    code: 1
+                };
+    
+                // Vérifiez si la réponse de la requête est 1 (succès)
+                if (data.code === 1) {
+                    // Affichage d'un message de succès avec SweetAlert
+                    Swal.fire({
+                        title: "Votre profile a été créé avec succès !",
+                        icon: "success",
+                        timer: 5000
+                    });
+                }
+            }
+        </script>
+
         <div id="dbalpha"></div>
         <div id="dialogBoxContent"></div>
         <div id="toast-box"></div>
@@ -204,8 +225,8 @@
         </div>
         <footer class="footer">
             <ul class="menu">
-                <li class="menu__item"><a class="menu__link" href="#">Accueil</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Contact : Tabaraa.dz@gmail.com</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact : Tabaraa.dz@gmail.com</a></li>
 
             </ul>
             <p>&copy;2024 Tabaraa | Tous droits réservés</p>

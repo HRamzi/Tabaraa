@@ -35,7 +35,9 @@
                                         Mot de passe Actuel
                                     </div>
                                     <div class="f-item f-md-50">
-                                        <input type="password" maxlength="20" id="profil-actuel-phone" name="mot_de_passe_actuel" value="" required oninput="verifierNumeroTelephone(this)" />
+                                        <input type="password" maxlength="20" id="profil-actuel-phone"
+                                            name="mot_de_passe_actuel" value="" required
+                                            oninput="verifierNumeroTelephone(this)" />
                                         <span class="text-danger">@error('mot_de_passe') {{ $message }} @enderror</span>
                                     </div>
                                 </label>
@@ -50,52 +52,77 @@
                                         Nouveau mot de passe
                                     </div>
                                     <div class="f-item f-md-50">
-                                        <input type="password" maxlength="20" id="profil-new-phone" name="nouveau_mot_de_passe" value="" required disabled />
+                                        <input type="password" maxlength="20" id="profil-new-phone"
+                                            name="nouveau_mot_de_passe" value="" required />
                                     </div>
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="f-container f-content-center">
-                        <a href="" class="btn lg red f-item f-md-33 text-center ma-xs"><i class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
-                        <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs"><i class="fa fa-check"></i>&nbsp;Valider</button>
+                        <a href="{{ route('profile') }}" class="btn lg red f-item f-md-33 text-center ma-xs"><i
+                                class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
+                        <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs"
+                            onclick="showSuccessMessage()"><i class="fa fa-check"></i>&nbsp;Valider</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <script>
-        function verifierNumeroTelephone(input) {
-            var champNouveauNumero = document.getElementById("profil-new-phone");
-            var numeroTelephoneActuel = input.value;
-    
-            // Vérifier la validité du numéro de téléphone actuel
-            if (input.validity.valid) {
-                // Effectuer une requête AJAX pour vérifier si le numéro existe dans la base de données Laravel
-                $.ajax({
-                    url: '{{ route("checkPhoneNumber") }}',
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        numero_telephone_actuel: numeroTelephoneActuel
-                    },
-                    success: function(response) {
-                        // Si le numéro existe, activer le champ du "Nouveau numéro de téléphone"
-                        if (response.exists) {
-                            champNouveauNumero.disabled = false;
-                        } else {
-                            champNouveauNumero.disabled = true;
-                        }
-                    }
+        function showSuccessMessage() {
+            var data = {
+                code: 1
+            };
+
+            // Vérifiez si la réponse de la requête est 1 (succès)
+            if (data.code === 1) {
+                // Affichage d'un message de succès avec SweetAlert
+                Swal.fire({
+                    title: "Votre demande a été effectuée avec succès",
+                    icon: "success",
+                    timer: 5000
                 });
-            } else {
-                // Si la saisie n'est pas valide, désactiver le champ du "Nouveau numéro de téléphone"
-                champNouveauNumero.disabled = true;
             }
         }
     </script>
-    
+
+    <div id="dbalpha"></div>
+    <div id="dialogBoxContent"></div>
+    <div id="toast-box"></div>
+    <div class="page-bottom">
+        <div class="container">
+            <div class="page-bottom-promote">
+                <img class="logo f-align-self-center" width="200" height="85"
+                    src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async"
+                    alt="" /><br>
+                <span class="pt-none mt-none ml-none"><span class="text-orange">Nous donnons des dons à toutes </span>
+                    &nbsp;
+                    <span class="text-blue-light">personnes étant dans le besoin</span></span>
+            </div>
+            <div class="page-bottom-illustrate">
+                <small><b>Tabaraa..</b><br>&nbsp;&nbsp;&nbsp;&nbsp;Ne vous encombrez pas de choses qui ne servent plus,
+                    donnez ! Meubles, vêtements... Offrez une deuxième vie à vos objets inutilisés; même abîmés, ils
+                    peuvent encore servir. Donnons les objets qui nous encombrent depuis tant de temps pour faire le
+                    bonheur de quelqu'un.</small>
+            </div>
+        </div>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+
+    <footer class="footer">
+
+
+        <ul class="menu">
+            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
+            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact </a></li>
+
+        </ul>
+        <p>&copy;2024 Tabaraa | Tous droits réservés</p>
+    </footer>
+    </div>
+
     <script>
         var $globals = {
             "API_Options": "{}",

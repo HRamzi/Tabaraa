@@ -2,6 +2,8 @@
 <html lang="fr">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{ asset('assets\js\sweetAlert.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
@@ -304,6 +306,25 @@
                 </div>
             </form>
         </div>
+
+        <script>
+            function showSuccessMessage() {
+                var data = {
+                    code: 1
+                };
+    
+                // Vérifiez si la réponse de la requête est 1 (succès)
+                if (data.code === 1) {
+                    // Affichage d'un message de succès avec SweetAlert
+                    Swal.fire({
+                        title: "Annonce créée avec succès !",
+                        icon: "success",
+                        timer: 5000
+                    });
+                }
+            }
+        </script>
+
         <div id="dbalpha"></div>
         <div id="dialogBoxContent"></div>
         <div id="toast-box"></div>

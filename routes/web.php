@@ -53,7 +53,7 @@ Route::prefix('profile')->middleware('auth')->group(function () {
     Route::get('/modifier-mot-de-passe', [ProfileController::class, 'afficherModifierMotDePasse'])->name('afficher_modifier_mot_de_passe');
     Route::post('/modifier-mot-de-passe', [ProfileController::class, 'modifierMotDePasse'])->name('modifier_mot_de_passe');
     Route::get('/modifier-numero-telephone', [ProfileController::class, 'afficherFormulaireModifierNumeroTelephone'])->name('afficher_modifier_numero_telephone');
-    Route::post('/verifier-Numero-telephone', [ProfileController::class, 'checkPhoneNumber'])->name('checkPhoneNumber');
+    Route::post('/verifier-Numero-telephone', [ProfileController::class, 'verifierNumeroTelephone'])->name('verifierNumeroTelephone');
     Route::post('/modifier-numero-telephone', [ProfileController::class, 'modifierNumeroTelephone'])->name('modifier_numero_telephone');
     Route::get('/supprimer-compte', [ProfileController::class, 'afficherSupprimerCompte'])->name('afficher_supprimer_Compte');
     Route::post('/supprimer-compte', [ProfileController::class, 'supprimerCompte'])->name('supprimerCompte');

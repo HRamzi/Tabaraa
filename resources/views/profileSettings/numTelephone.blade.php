@@ -5,6 +5,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('assets\js\jQuery.js') }}"></script>
+    <script src="{{ asset('assets\js\sweetAlert.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
@@ -56,24 +57,42 @@
                         </div>
                     </div>
                     <div class="f-container f-content-center">
-                        <a href="" class="btn lg red f-item f-md-33 text-center ma-xs"><i class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
-                        <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs"><i class="fa fa-check"></i>&nbsp;Valider</button>
+                        <a href="{{ route('profile') }}" class="btn lg red f-item f-md-33 text-center ma-xs"><i class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
+                        <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs" onclick="showSuccessMessage()"><i class="fa fa-check"></i>&nbsp;Valider</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    
+
+    <script>
+        function showSuccessMessage() {
+            var data = {
+                code: 1
+            };
+
+            // Vérifiez si la réponse de la requête est 1 (succès)
+            if (data.code === 1) {
+                // Affichage d'un message de succès avec SweetAlert
+                Swal.fire({
+                    title: "Votre demande a été effectuée avec succès",
+                    icon: "success",
+                    timer: 5000
+                });
+            }
+        }
+    </script>
+
     <script>
         function verifierNumeroTelephone(input) {
             var champNouveauNumero = document.getElementById("profil-new-phone");
             var numeroTelephoneActuel = input.value;
-    
+
             // Vérifier la validité du numéro de téléphone actuel
             if (input.validity.valid) {
                 // Effectuer une requête AJAX pour vérifier si le numéro existe dans la base de données Laravel
                 $.ajax({
-                    url: '{{ route("checkPhoneNumber") }}',
+                    url: '{{ route("verifierNumeroTelephone") }}',
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -94,7 +113,40 @@
             }
         }
     </script>
-    
+
+    <div id="dbalpha"></div>
+    <div id="dialogBoxContent"></div>
+    <div id="toast-box"></div>
+    <div class="page-bottom">
+        <div class="container">
+            <div class="page-bottom-promote">
+                <img class="logo f-align-self-center" width="200" height="85" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="" /><br>
+                <span class="pt-none mt-none ml-none"><span class="text-orange">Nous donnons des dons à toutes </span>
+                    &nbsp;
+                    <span class="text-blue-light">personnes étant dans le besoin</span></span>
+            </div>
+            <div class="page-bottom-illustrate">
+                <small><b>Tabaraa..</b><br>&nbsp;&nbsp;&nbsp;&nbsp;Ne vous encombrez pas de choses qui ne servent plus,
+                    donnez ! Meubles, vêtements... Offrez une deuxième vie à vos objets inutilisés; même abîmés, ils
+                    peuvent encore servir. Donnons les objets qui nous encombrent depuis tant de temps pour faire le
+                    bonheur de quelqu'un.</small>
+            </div>
+        </div>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+
+    <footer class="footer">
+
+
+        <ul class="menu">
+            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
+            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact </a></li>
+
+        </ul>
+        <p>&copy;2024 Tabaraa | Tous droits réservés</p>
+    </footer>
+    </div>
+
     <script>
         var $globals = {
             "API_Options": "{}",

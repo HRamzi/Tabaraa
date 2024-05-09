@@ -102,8 +102,8 @@
 
 
             <ul class="menu">
-                <li class="menu__item"><a class="menu__link" href="#">Accueil</a></li>
-                <li class="menu__item"><a class="menu__link" href="">Contact : Tabaraa.dz@gmail.com</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact : Tabaraa.dz@gmail.com</a></li>
 
             </ul>
             <p>&copy;2024 Tabaraa | Tous droits réservés</p>
