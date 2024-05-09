@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
     <title>Tabaraa</title>
-
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <body id="page-profil">
@@ -25,79 +26,67 @@
         <div class="container main-bg">
             <h1 class="rep"><i class="fa fa-envelope-o mr-xs"></i>Modification d'utilisateur</h1>
             <div class="panel pa-xl ma-xs">
-                <form action="{{ route('modifier_mot_de_passe') }}" method="post" class="custom-form f-item pa-xs">
+                <form id="changePasswordForm" action="{{ route('modifier_mot_de_passe') }}" method="post"
+                    class="custom-form f-item pa-xs">
                     @csrf
-                    <div class="grey mt-xl">
-                        <div>
-                            <div class="block-input f-item">
-                                <label for="profil-actuel-phone" class="f-container area">
-                                    <div class="f-item f-md-50 text-center">
-                                        Mot de passe Actuel
-                                    </div>
-                                    <div class="f-item f-md-50">
-                                        <input type="password" maxlength="20" id="profil-actuel-phone"
-                                            name="mot_de_passe_actuel" value="" required
-                                            oninput="verifierNumeroTelephone(this)" />
-                                        <span class="text-danger">@error('mot_de_passe') {{ $message }} @enderror</span>
-                                    </div>
-                                </label>
+                    <div class="block-input f-item">
+                        <label for="profil-actuel-phone" class="f-container area">
+                            <div class="f-item f-md-50 text-center">
+                                Mot de passe Actuel
                             </div>
-                        </div>
-                    </div>
-                    <div class="grey mt-xl">
-                        <div>
-                            <div class="block-input f-item">
-                                <label for="profil-new-phone" class="f-container area">
-                                    <div class="f-item f-md-50 text-center">
-                                        Nouveau mot de passe
-                                    </div>
-                                    <div class="f-item f-md-50">
-                                        <input type="password" maxlength="20" id="profil-new-phone"
-                                            name="nouveau_mot_de_passe" value="" required />
-                                    </div>
-                                </label>
+                            <div class="f-item f-md-50">
+                                <input type="password" maxlength="20" id="profil-actuel-phone"
+                                    name="mot_de_passe_actuel" value="" required />
+                                <span class="text-danger">@error('mot_de_passe_actuel') {{ $message }} @enderror</span>
                             </div>
-                        </div>
+                        </label>
                     </div>
+
+                    <div class="block-input f-item">
+                        <label for="profil-new-phone" class="f-container area">
+                            <div class="f-item f-md-50 text-center">
+                                Nouveau mot de passe
+                            </div>
+                            <div class="f-item f-md-50">
+                                <input type="password" maxlength="20" id="profil-new-phone"
+                                    name="nouveau_mot_de_passe" value="" required />
+                                <span class="text-danger">@error('nouveau_mot_de_passe') {{ $message }} @enderror</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="block-input f-item">
+                        <label for="profil-confirm-phone" class="f-container area">
+                            <div class="f-item f-md-50 text-center">
+                                Confirmer le nouveau mot de passe
+                            </div>
+                            <div class="f-item f-md-50">
+                                <input type="password" maxlength="20" id="profil-confirm-phone"
+                                    name="nouveau_mot_de_passe_confirmation" value="" required />
+                            </div>
+                        </label>
+                    </div>
+
                     <div class="f-container f-content-center">
-                        <a href="{{ route('profile') }}" class="btn lg red f-item f-md-33 text-center ma-xs"><i
+                        <a href="{{ route('profile') }}"
+                            class="btn lg red f-item f-md-33 text-center ma-xs"><i
                                 class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
-                        <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs"
-                            onclick="showSuccessMessage()"><i class="fa fa-check"></i>&nbsp;Valider</button>
+                        <button type="button" id="submitBtn" class="btn lg f-item blue f-md-33 text-center ma-xs"><i
+                                class="fa fa-check"></i>&nbsp;Valider</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <script>
-        function showSuccessMessage() {
-            var data = {
-                code: 1
-            };
-
-            // Vérifiez si la réponse de la requête est 1 (succès)
-            if (data.code === 1) {
-                // Affichage d'un message de succès avec SweetAlert
-                Swal.fire({
-                    title: "Votre demande a été effectuée avec succès",
-                    icon: "success",
-                    timer: 5000
-                });
-            }
-        }
-    </script>
-
-    <div id="dbalpha"></div>
-    <div id="dialogBoxContent"></div>
-    <div id="toast-box"></div>
     <div class="page-bottom">
         <div class="container">
             <div class="page-bottom-promote">
                 <img class="logo f-align-self-center" width="200" height="85"
                     src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async"
                     alt="" /><br>
-                <span class="pt-none mt-none ml-none"><span class="text-orange">Nous donnons des dons à toutes </span>
+                <span class="pt-none mt-none ml-none"><span
+                        class="text-orange">Nous donnons des dons à toutes </span>
                     &nbsp;
                     <span class="text-blue-light">personnes étant dans le besoin</span></span>
             </div>
@@ -108,31 +97,54 @@
                     bonheur de quelqu'un.</small>
             </div>
         </div>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     </div>
 
     <footer class="footer">
-
-
         <ul class="menu">
             <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
             <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact </a></li>
-
         </ul>
         <p>&copy;2024 Tabaraa | Tous droits réservés</p>
     </footer>
-    </div>
 
     <script>
-        var $globals = {
-            "API_Options": "{}",
-            "API_Modules": "{}"
-        };
+        // Intercepter la soumission du formulaire
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            // Envoyer la requête AJAX
+            var form = document.getElementById('changePasswordForm');
+            var formData = new FormData(form);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action);
+            xhr.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Afficher le message de succès
+                        showSuccessMessage();
+                    } else {
+                        // Afficher une alerte d'erreur
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'Une erreur est survenue lors de la modification du mot de passe.',
+                            icon: 'error',
+                            timer: 5000
+                        });
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+
+        function showSuccessMessage() {
+            // Affichage d'un message de succès avec SweetAlert
+            Swal.fire({
+                title: "Votre mot de passe a été modifié avec succès",
+                icon: "success",
+                timer: 5000
+            });
+        }
     </script>
-    <script src="{{ asset('assets\js\script1.js') }}"></script>
-    <script src="{{ asset('assets\js\script2.js') }}"></script>
-    <script src="{{ asset('assets\js\script3.js') }}"></script>
-    <script src="{{ asset('assets\js\user.js') }}"></script>
+
 </body>
 
 </html>

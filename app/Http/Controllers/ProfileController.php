@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Annonce;
 use App\Models\Utilisateur;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -71,19 +72,34 @@ class ProfileController extends Controller
         $user = auth()->user();
         return view('profileSettings.modifierMotPasse');
     }
-    public function modifierMotDePasse(Request $request)
-    {
-        // Valider les données du formulaire
-        $request->validate([
-            'nouveau_mot_de_passe' => 'required|string|min:8|confirmed',
-        ]);
+public function modifierMotDePasse(Request $request)
+{
+    // Valider les données du formulaire
+    $request->validate([
+        'mot_de_passe_actuel' => 'required',
+        'nouveau_mot_de_passe' => 'required|string|min:8|confirmed',
+    ]);
 
-        // Logique pour modifier le mot de passe de l'utilisateur
-        $user = auth()->user();
-        $user->password = bcrypt($request->input('nouveau_mot_de_passe'));
-        $user->Utilisateur::save();
-        return redirect()->back()->with('success', 'Mot de passe mis à jour avec succès.');
+    // Récupérer l'utilisateur authentifié
+    $user = Auth::user();
+
+    // Vérifier si le mot de passe actuel correspond au mot de passe de l'utilisateur
+    if (!Hash::check($request->mot_de_passe_actuel, $user->mot_de_passe)) {
+        return redirect()->back()->withErrors(['mot_de_passe_actuel' => 'Le mot de passe actuel est incorrect.']);
     }
+
+    // Mettre à jour le mot de passe de l'utilisateur
+    $user->mot_de_passe = Hash::make($request->nouveau_mot_de_passe);
+    $user->save();
+
+    return redirect()->back()->with('success', 'Mot de passe mis à jour avec succès.');
+}
+
+
+
+
+
+
 
     public function afficherSupprimerCompte()
     {
