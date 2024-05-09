@@ -47,8 +47,9 @@ Route::prefix('admin')->group(function () {
 
 // Routes pour la gestion du profil utilisateur
 Route::prefix('profile')->middleware('auth')->group(function () {
-    Route::get('/', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     Route::get('/mesAnnonces', [ProfileController::class, 'mesAnnonces'])->name('mesAnnonces');
+    Route::get('/mot-de-passe-oublie', [ProfileController::class, 'afficherModifierMotDePasse'])->name('mot_de_passe_oublie');
     Route::get('/modifier-mot-de-passe', [ProfileController::class, 'afficherModifierMotDePasse'])->name('afficher_modifier_mot_de_passe');
     Route::post('/modifier-mot-de-passe', [ProfileController::class, 'modifierMotDePasse'])->name('modifier_mot_de_passe');
     Route::get('/modifier-numero-telephone', [ProfileController::class, 'afficherFormulaireModifierNumeroTelephone'])->name('afficher_modifier_numero_telephone');
@@ -63,7 +64,7 @@ Route::prefix('userNotAuth')->group(function () {
     Route::get('/categories/vetements', [recupererAnnonce::class, 'afficherAnnoncesVetement'])->name('vetement');
     Route::get('/categories/livres', [recupererAnnonce::class, 'afficherAnnoncesLivre'])->name('livre');
     Route::get('/categories/medecine', [recupererAnnonce::class, 'afficherAnnoncesMedecine'])->name('medecine');
-    Route::get('/categories/article_maison', [recupererAnnonce::class, 'afficherAnnoncesArticle_Maison'])->name('article_maison');
+    Route::get('/categories/article_maison', [recupererAnnonce::class, 'afficherAnnonces_Article_Maison'])->name('article_maison');
     Route::get('/categories/auto', [recupererAnnonce::class, 'afficherAnnoncesAuto'])->name('auto');
     Route::get('/categories/autre', [recupererAnnonce::class, 'afficherAnnoncesAutre'])->name('autre');
 });

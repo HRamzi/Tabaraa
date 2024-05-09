@@ -53,7 +53,7 @@ class ProfileController extends Controller
         // Logique pour modifier le numéro de téléphone de l'utilisateur
         $user = auth()->user();
         $user->numero_telephone = $request->input('nouveau_numero_telephone');
-        $user-> Utilisateur::save();
+        $user-> save();
 
         return redirect()->back()->with('success', 'Numéro de téléphone mis à jour avec succès.');
     }
@@ -72,7 +72,7 @@ class ProfileController extends Controller
         // Logique pour modifier le mot de passe de l'utilisateur
         $user = auth()->user();
         $user->password = bcrypt($request->input('nouveau_mot_de_passe'));
-        $user->Utilisateur::save();
+        $user->save();
         return redirect()->back()->with('success', 'Mot de passe mis à jour avec succès.');
     }
 

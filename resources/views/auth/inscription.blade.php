@@ -129,27 +129,34 @@
                                             <div class="f-item f-md-40 text-left">
                                                 <div class="f-container f-wrap-nowrap f-align-center">
                                                     <input type="password" autocomplete="off" class="form-control" id="sign_password" name="mot_de_passe" value="" required>
-                                                    <span class="text-danger">@error('mot_de_passe') {{ $message }} @enderror</span>
+                                                    <br>
+                                                    <div class="error-message"></div>
                                                 </div>
+                                                <span class="mdp-text-danger">@error('mot_de_passe') {{ $message }} @enderror</span>
                                             </div>
                                         </label>
                                     </div>
                                 </div>
+
                                 <div class="">
                                     <div class="block-input mt-md">
-                                        <label for="sign_passconf" class="f-container area">
+                                        <label for="sign_password" class="f-container area">
                                             <div class="f-item f-md-40 text-center pa-xs text">
-                                                Confirmation du mot de passe
+                                                Confirmation mot de passe
                                             </div>
-                                            <div class="f-item f-md-40">
+                                            <div class="f-item f-md-40 text-left">
                                                 <div class="f-container f-wrap-nowrap f-align-center">
-                                                    <input type="password" autocomplete="off" class="form-control" id="sign_passconf" name="confirmation_mot_de_passe" value="{{ old('photo_profile') }}" required>
-                                                    <span class="text-danger">@error('mot_de_passe') {{ $message }} @enderror</span>
+                                                    <input type="password" autocomplete="off" class="form-control" id="sign_password" name="confirmation_mot_de_passe" value="" required>
+                                                    <br>
+                                                    <div class="error-message"></div>
                                                 </div>
+                                                <span class="mdp-text-danger">@error('confirmation_mot_de_passe') {{ $message }} @enderror</span>
                                             </div>
                                         </label>
+                                        
                                     </div>
                                 </div>
+
                                 <div class="">
                                     <div class="block-input mt-md">
                                         <label for="sign_pseudo" class="f-container area">

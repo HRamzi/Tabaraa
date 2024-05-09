@@ -150,6 +150,6 @@ class CreeAnnonceController extends Controller
     {
         $annonce = Annonce::findOrFail($id);
         $annonce->delete();
-        return redirect('mesAnnonces')->with('success', 'Annonce supprimée avec succès.');
+        return redirect()->route('mesAnnonces')->with('success', 'Annonce supprimée avec succès.');
     }
 }
