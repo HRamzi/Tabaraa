@@ -85,16 +85,15 @@ public function modifierMotDePasse(Request $request)
 
     // Vérifier si le mot de passe actuel correspond au mot de passe de l'utilisateur
     if (!Hash::check($request->mot_de_passe_actuel, $user->mot_de_passe)) {
-        return redirect()->back()->withErrors(['mot_de_passe_actuel' => 'Le mot de passe actuel est incorrect.']);
+        return response()->json(['success' => false, 'message' => 'Le mot de passe actuel est incorrect.']);
     }
 
     // Mettre à jour le mot de passe de l'utilisateur
     $user->mot_de_passe = Hash::make($request->nouveau_mot_de_passe);
     $user->save();
 
-    return redirect()->back()->with('success', 'Mot de passe mis à jour avec succès.');
+    return response()->json(['success' => true, 'message' => 'Mot de passe mis à jour avec succès.']);
 }
-
 
 
 

@@ -2,7 +2,6 @@
 <html lang="fr">
 
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('assets\js\jQuery.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
@@ -114,35 +113,42 @@
             var form = document.getElementById('changePasswordForm');
             var formData = new FormData(form);
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', form.action);
-            xhr.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+            xhr.open('POST', form.action, true);
+            xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
-                        // Afficher le message de succès
-                        showSuccessMessage();
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            // Afficher un message de succès
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'success',
+                                timer: 5000
+                            }).then(() => {
+                                // Rediriger vers la page de profil
+                                window.location.href = "{{ route('profile') }}";
+                            });
+                        } else {
+                            // Afficher un message d'erreur
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'error'
+                            });
+                        }
                     } else {
-                        // Afficher une alerte d'erreur
+                        // Afficher un message d'erreur générique
                         Swal.fire({
                             title: 'Erreur',
-                            text: 'Une erreur est survenue lors de la modification du mot de passe.',
-                            icon: 'error',
-                            timer: 5000
+                            text: 'Une erreur s\'est produite. Veuillez réessayer.',
+                            icon: 'error'
                         });
                     }
                 }
             };
             xhr.send(formData);
         });
-
-        function showSuccessMessage() {
-            // Affichage d'un message de succès avec SweetAlert
-            Swal.fire({
-                title: "Votre mot de passe a été modifié avec succès",
-                icon: "success",
-                timer: 5000
-            });
-        }
     </script>
 
 </body>
