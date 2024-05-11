@@ -4,7 +4,6 @@
 <head>
     <link rel="preload" as="font" href="/fonts/fontawesome-webfont.woff2?v=4.7.0" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="/fonts/icomoon4.woff2" type="font/woff2" crossorigin>
-<<<<<<< HEAD
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <script src="{{ asset('assets\js\pusher.js') }}"></script>
     <script src="{{ asset('assets\js\jQuery.js') }}"></script>
@@ -101,15 +100,6 @@
             cursor: pointer;
         }
     </style>
-=======
-    <scrip src="{{ asset('assets\js\App.js') }}">
-        </script>
-        <script src="{{ asset('assets\js\pusher.js') }}"></script>
-        <script src="{{ asset('assets\js\jQuery.js') }}"></script>
-        <link rel="stylesheet" href="{{ asset('assets/css/message-style.css') }}" />
-        <link rel="icon" href="{{ asset('assets\images\logoT.svg') }}">
-        <title>Messages</title>
->>>>>>> bbe768e2ec596c1cbb6580afc78ab6d68c0c2b44
 </head>
 
 <body>
