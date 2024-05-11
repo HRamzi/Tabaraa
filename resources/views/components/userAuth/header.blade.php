@@ -32,13 +32,13 @@
 
             <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
                 <button title="Ma messagerie" class="repliable ham-toggle btn-light position-relative" onclick="markAllMessagesAsRead()">
-                    <a href="{{ route('messages') }}" class="text-decoration-none">
-                        <span class="shell msgs-shell position-relative d-inline-block">
-                            <i class="fa fa-envelope fa-lg position-relative d-block mx-auto"></i>
-                            <span id="message-counter" class="badge badge-pill badge-primary bg-danger position-absolute top-0 start-100 translate-middle p-1"></span>
-                        </span>
-                    </a>
-                </button>
+    <a href="{{ route('messages') }}" class="text-decoration-none">
+        <span class="shell msgs-shell position-relative d-inline-block">
+            <i class="fa fa-envelope fa-lg position-relative d-block mx-auto"></i>
+            <span id="message-counter" class="badge badge-pill badge-primary bg-danger position-absolute top-0 start-100 translate-middle p-1"></span>
+        </span>
+    </a>
+</button>
 
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assurez-vous d'inclure jQuery -->
 

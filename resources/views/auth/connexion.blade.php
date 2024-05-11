@@ -94,8 +94,13 @@
                                                     </div>
                                                 </div>
                                             </label>
-                                            <div class="f-item pb-sm text"><a href="{{ route('mot_de_passe_oublie') }}">Mot de passe oublié ?</a></div>
-                                        </div>
+       <div class="f-item pb-sm text">
+    <a href="{{ route('oublie_mot_de_passe') }}">Mot de passe oublié ?</a>
+</div>
+
+
+
+</div>
                                     </div>
                                     <div class="f-container text-center no-gutter block-input submit">
                                         <div class="f-item"><button type="submit" class=" btn blue">Se connecter</button></div>
