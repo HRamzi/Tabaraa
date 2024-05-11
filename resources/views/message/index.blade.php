@@ -9,7 +9,7 @@
         <script src="{{ asset('assets\js\pusher.js') }}"></script>
         <script src="{{ asset('assets\js\jQuery.js') }}"></script>
         <link rel="stylesheet" href="{{ asset('assets/css/message-style.css') }}" />
-        <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
+        <link rel="icon" href="{{ asset('assets\images\logoT.svg') }}">
         <title>Messages</title>
 </head>
 

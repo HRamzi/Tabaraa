@@ -4,7 +4,7 @@
 <head>
     <script src="js.js"></script>
     <link type="text/css" rel="stylesheet" href="style.css"/>
-    <link rel="icon" href="imgs/logoT.png">
+    <link rel="icon" href="imgs/logoT.svg">
     <title>abaraa</title>    
 </head>
  
