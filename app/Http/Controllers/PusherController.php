@@ -13,79 +13,49 @@ use App\Models\Message;
 
 class PusherController extends Controller
 {
-    
-
-public function MessageIndex()
-{
-    $messages = Message::all();
-    return view('message.index', compact('messages'));
-}
-
-public function markAllMessagesAsRead(Request $request) {
-    // Mettre à jour toutes les entrées de message comme lues
-    $updated = Message::query()->update(['read' => true]);
-
-    // Vérifiez si la mise à jour a réussi
-    if ($updated) {
-        // Retourner une réponse JSON pour indiquer le succès
-        return response()->json(['success' => true]);
-    } else {
-        // Retourner une réponse JSON pour indiquer l'échec
-        return response()->json(['success' => false]);
+    public function MessageIndex()
+    {
+        $messages = Message::all();
+        return view('message.index', compact('messages'));
     }
-}
 
-public function broadcast(Request $request)
+    public function markAllMessagesAsRead(Request $request) {
+        // Mettre à jour toutes les entrées de message comme lues
+        $updated = Message::query()->update(['read' => true]);
+
+        // Vérifiez si la mise à jour a réussi
+        if ($updated) {
+            // Retourner une réponse JSON pour indiquer le succès
+            return response()->json(['success' => true]);
+        } else {
+            // Retourner une réponse JSON pour indiquer l'échec
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function broadcast(Request $request)
 {
     // Créer un nouveau message
     $message = new Message();
 
-    // Récupérer l'ID de l'émetteur depuis la requête HTTP
-    $id_expediteur = $request->input('id_expediteur');
+    // Récupérer les données du formulaire
+    $message->id_expediteur = $request->id_expediteur;
+    $message->id_destinataire = $request->id_destinataire; // Ajout de id_destinataire
+    $message->contenu = $request->message;
+    $message->read = false; // Marquer le message comme non lu
 
-    // Si l'ID de l'émetteur est fourni, définir l'ID de l'émetteur
-    if ($id_expediteur !== null) {
-        $message->id_expediteur = $id_expediteur;
-    }
+    // Enregistrer le message dans la base de données
+    $message->save();
 
-    // Récupérer le contenu du message depuis la requête HTTP
-    $messageContent = $request->input('msg');
-
-    // Si le contenu du message est vide, définir une valeur par défaut
-    if (empty($messageContent)) {
-        $messageContent = "Aucun contenu";
-    }
-
-    // Ajouter le contenu du message
-    $message->contenu = $messageContent;
-
-    // Récupérer l'ID du destinataire depuis la requête HTTP
-    $recipient_id = $request->input('id_destinataire');
-
-    // Si l'ID du destinataire est null, forcer l'ajout du contenu du message
-    if ($recipient_id === null) {
-        // Enregistrer le message dans la base de données
-        $message->save();
-
-        // Retourner une réponse JSON avec le message créé
-        return response()->json(['message' => $message]);
-    } else {
-        // Définir l'ID du destinataire
-        $message->id_destinataire = $recipient_id;
-
-        // Enregistrer le message dans la base de données
-        $message->save();
-
-        // Diffuser le message via Pusher
-        broadcast(new PusherBroadcast($messageContent))->toOthers();
-
-        // Retourner une réponse JSON avec le message créé
-        return response()->json(['message' => $message]);
-    }
+    // Retourner le message
+    return response()->json(['message' => $message]);
 }
 
 
-
+   public function receive(Request $request)
+{
+    return view('message.receive', ['message' => $request->get('message')]);
+}
 
 
 public function getUnreadMessageCount() {
@@ -110,8 +80,5 @@ public function getMessageCount() {
 }
 
 
-    public function receive(Request $request)
-    {
-        return view('message.receive', ['message' => $request->get('message')]);
-    }
+   
 }

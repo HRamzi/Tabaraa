@@ -3,8 +3,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,14 +13,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_expediteur');
             $table->unsignedBigInteger('id_destinataire');
-            $table->text('contenu')->nullable(); // Modifier pour rendre nullable
+            $table->text('contenu')->nullable(); // Rendre la colonne 'contenu' nullable
             $table->timestamps();
 
             $table->foreign('id_expediteur')->references('id')->on('utilisateurs')->onDelete('cascade');
             $table->foreign('id_destinataire')->references('id')->on('utilisateurs')->onDelete('cascade');
         });
     }
-
 
     /**
      * Reverse the migrations.
