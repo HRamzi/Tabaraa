@@ -5,7 +5,7 @@
         <link rel="preload" as="font" href="/fonts/icomoon4.woff2" type="font/woff2" crossorigin />
         <script src="{{ asset('assets\js\App.js') }}"></script>
         <link href="{{ asset('assets\css\styles.css') }}" rel="stylesheet" />
-        <link rel="icon" href="{{ asset('assets\images\logoT.png') }}" />
+        <link rel="icon" href="{{ asset('assets\images\logoT.svg') }}" />
         <title>Tabaraa</title>
     </head>
     <body id="page-login">

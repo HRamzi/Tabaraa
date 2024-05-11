@@ -6,7 +6,7 @@
     <script src="{{ asset('assets\js\jQuery.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
-    <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
+    <link rel="icon" href="{{ asset('assets\images\logoT.svg') }}">
     <title>Tabaraa</title>
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

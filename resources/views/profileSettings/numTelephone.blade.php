@@ -8,7 +8,7 @@
     <script src="{{ asset('assets\js\sweetAlert.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
-    <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
+    <link rel="icon" href="{{ asset('assets\images\logoT.svg') }}">
     <title>Tabaraa</title>
 
 </head>
