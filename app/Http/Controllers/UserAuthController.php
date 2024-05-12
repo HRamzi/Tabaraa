@@ -100,27 +100,41 @@ class UserAuthController extends Controller
         return view("auth.connexion");
     }
 
-    public function connexion(Request $request)
-    {
-        $user = Utilisateur::where("email", $request->input("email"))->first();
+ public function connexion(Request $request)
+{
+    $user = Utilisateur::where("email", $request->input("email"))->first();
 
-        if (!$user || !Hash::check($request->input("mot_de_passe"), $user->mot_de_passe)) {
-            $errors = [
-                'email' => ['Email et/ou Mot de passe incorrect.'],
-            ];
-            return redirect()->back()->withErrors($errors);
-        }
-
-        Auth::login($user);
-        session(['user' => Auth::user()]);
-
-        // Redirection en fonction du rôle de l'utilisateur
-        if ($user->role === 'admin') {
-            return redirect('/admin-home');
-        } else {
-            return redirect('/user-home');
-        }
+    if (!$user || !Hash::check($request->input("mot_de_passe"), $user->mot_de_passe)) {
+        $errors = [
+            'email' => ['Email et/ou Mot de passe incorrect.'],
+        ];
+        return redirect()->back()->withErrors($errors);
     }
+
+    Auth::login($user);
+
+    // Redirection en fonction du rôle de l'utilisateur
+    if ($user->role === 'admin') {
+        return redirect('/admin-home')->with('user', true);
+    } else {
+        // Si l'utilisateur a été redirigé vers la page de connexion depuis une annonce, retourner à cette annonce
+        $redirect_url = session()->get('redirect_url') ?? '/user-home';
+        if (session()->has('annonce_id')) {
+            $annonce_id = session()->get('annonce_id');
+            session()->forget('annonce_id');
+            return redirect()->route('annonces.details', ['id' => $annonce_id])->with('user', true);
+        }
+
+        session()->forget('redirect_url');
+
+        // Stocker l'URL actuelle dans une variable de session pour rediriger après 2 secondes
+        session()->put('current_url', $redirect_url);
+
+        return redirect($redirect_url)->with('user', true);
+    }
+}
+
+
 
     public function deconnexion(Request $request)
     {

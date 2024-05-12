@@ -117,13 +117,24 @@ class recupererAnnonce extends Controller
         return view('categories.userAuth.autre', compact('annonces'));
     }
 
-    public function detailsAnnonce($id)
-    {
-        // Récupérer les détails de l'annonce en fonction de l'ID
-        $annonce = Annonce::find($id);
+ // Modifier la méthode detailsAnnonce dans le contrôleur recupererAnnonce
+public function detailsAnnonce($id)
+{
+    // Récupérer les détails de l'annonce en fonction de l'ID
+    $annonce = Annonce::find($id);
 
-        // Passer les détails à la vue
-        return view('annonces.details', compact('annonce'));
+    // Vérifier si l'annonce existe
+    if (!$annonce) {
+        abort(404); // Renvoyer une erreur 404 si l'annonce n'est pas trouvée
     }
+
+    // Stocker l'ID de l'annonce dans la session
+    session()->put('annonce_id', $id);
+
+    // Passer les détails à la vue
+    return view('annonces.details', compact('annonce'));
+}
+
+
 
 }
