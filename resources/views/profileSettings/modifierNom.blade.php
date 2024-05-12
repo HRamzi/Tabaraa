@@ -213,18 +213,19 @@
         <div class="container main-bg">
             <h1 class="rep"><i class="fa fa-envelope-o mr-xs"></i>Modification nom d'utilisateur</h1>
             <div class="panel pa-xl ma-xs">
-
-
-                <form action="" method="post" class="custom-form f-item pa-xs">
+                <form action="{{ route('modifier_Nom_Complet') }}" method="post" class="custom-form f-item pa-xs">
+                    @csrf
                     <div class="grey mt-xl">
                         <div class="block-input f-item">
                             <label class="f-container area">
                                 <div class="f-item f-md-50 text-center">
-                                    Pseudo actuel
+                                    Nom Complet actuel
                                 </div>
                                 <div class="f-item f-md-50 text-center">
-                                    peudo
-                                    <!-- recuperer le nom d'utilisateur		 -->
+                                    @php $utilisateur = auth()->user(); @endphp
+                                    @if($utilisateur)
+                                        {{$utilisateur->Nom_Complet}}
+                                    @endif
                                 </div>
                             </label>
                         </div>
@@ -234,10 +235,10 @@
                             <div class="block-input f-item">
                                 <label for="profil-new-pseudo" class="f-container area">
                                     <div class="f-item f-md-50 text-center">
-                                        Nouveau pseudo
+                                        Nouveau Nom
                                     </div>
                                     <div class="f-item f-md-50">
-                                        <input type="text" maxlength="20" id="profil-new-pseudo" name="pseudo" value="" />
+                                        <input type="text" maxlength="20" id="profil-new-pseudo" name="Nom_Complet" value="" />
                                     </div>
                                 </label>
                             </div>
@@ -258,7 +259,7 @@
         <div class="page-bottom">
             <div class="container">
                 <div class="page-bottom-promote">
-                    <img class="logo f-align-self-center" width="200" height="85" src="imgs/logo1icondonation.png" loading="lazy" decoding="async" alt="" /><br>
+                    <img class="logo f-align-self-center" width="200" height="85" src="{{ asset('assets\images\logo1icondonation.png') }}" loading="lazy" decoding="async" alt="" /><br>
                     <span class="pt-none mt-none ml-none"><span class="text-orange">Nous donnons des dons à toutes </span>
                         &nbsp;
                         <span class="text-blue-light">personnes étant dans le besoin</span></span>

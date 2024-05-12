@@ -4,12 +4,11 @@
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('assets\js\jQuery.js') }}"></script>
+    <script src="{{ asset('assets\js\sweetAlert.js') }}"></script>
     <script src="{{ asset('assets\js\App.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets\css\styles.css') }}" />
     <link rel="icon" href="{{ asset('assets\images\logoT.png') }}">
     <title>Mot de passe oublié - Tabaraa</title>
-    <!-- SweetAlert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         /* Ajout de styles pour l'icône d'œil */
         .password-input-group {
@@ -91,7 +90,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    
     <div class="page-bottom">
         <div class="container">
             <div class="page-bottom-promote">
@@ -118,6 +117,7 @@
         </ul>
         <p>&copy;2024 Tabaraa | Tous droits réservés</p>
     </footer>
+</div>
 
     <script>
         function suivant() {

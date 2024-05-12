@@ -228,6 +228,7 @@
 
                         <div class="f-item f-md-50 text-right pa-md">
                             <form action="{{ route('supprimerCompte') }}" method="post">
+                                @csrf
                                 <input type="hidden" name="del_token">
                                 <button class="btn blue" type="submit" name="delete" value="1"><i class="fa fa-user-times"></i>Supprimer mon compte</button>
                             </form>

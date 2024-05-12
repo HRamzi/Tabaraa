@@ -30,6 +30,19 @@ class ProfileController extends Controller
         return view('mesAnnonces', compact('annonces'));
     }
 
+    public function afficherModifierNom()
+    {
+        return view('profileSettings.modifierNom');
+    }
+
+    public function modifierNom(Request $request)
+    {
+        $utilisateur = Auth::user();
+        $utilisateur->Nom_Complet = $request->input('Nom_Complet');
+        $utilisateur->save();
+        return redirect('/profile')->with('success', 'Nom modifié avec succès!');
+    }
+
     public function afficherFormulaireModifierNumeroTelephone()
     {
         $user = auth()->user();
@@ -72,33 +85,28 @@ class ProfileController extends Controller
         $user = auth()->user();
         return view('profileSettings.modifierMotPasse');
     }
-public function modifierMotDePasse(Request $request)
-{
-    // Valider les données du formulaire
-    $request->validate([
-        'mot_de_passe_actuel' => 'required',
-        'nouveau_mot_de_passe' => 'required|string|min:8|confirmed',
-    ]);
+    public function modifierMotDePasse(Request $request)
+    {
+        // Valider les données du formulaire
+        $request->validate([
+            'mot_de_passe_actuel' => 'required',
+            'nouveau_mot_de_passe' => 'required|string|min:8|confirmed',
+        ]);
 
-    // Récupérer l'utilisateur authentifié
-    $user = Auth::user();
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
 
-    // Vérifier si le mot de passe actuel correspond au mot de passe de l'utilisateur
-    if (!Hash::check($request->mot_de_passe_actuel, $user->mot_de_passe)) {
-        return response()->json(['success' => false, 'message' => 'Le mot de passe actuel est incorrect.']);
+        // Vérifier si le mot de passe actuel correspond au mot de passe de l'utilisateur
+        if (!Hash::check($request->mot_de_passe_actuel, $user->mot_de_passe)) {
+            return response()->json(['success' => false, 'message' => 'Le mot de passe actuel est incorrect.']);
+        }
+
+        // Mettre à jour le mot de passe de l'utilisateur
+        $user->mot_de_passe = Hash::make($request->nouveau_mot_de_passe);
+        $user->save();
+
+        return response()->json(['success' => true, 'message' => 'Mot de passe mis à jour avec succès.']);
     }
-
-    // Mettre à jour le mot de passe de l'utilisateur
-    $user->mot_de_passe = Hash::make($request->nouveau_mot_de_passe);
-    $user->save();
-
-    return response()->json(['success' => true, 'message' => 'Mot de passe mis à jour avec succès.']);
-}
-
-
-
-
-
 
     public function afficherSupprimerCompte()
     {
@@ -109,7 +117,7 @@ public function modifierMotDePasse(Request $request)
     {
         // Logique pour supprimer le compte de l'utilisateur
         $user = auth()->user();
-        $user->Utilisateur::delete();
+        $user->delete();
         return redirect('home')->with('success', 'Votre compte a été supprimé avec succès.');
     }
 }
