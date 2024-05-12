@@ -156,26 +156,28 @@
 
                     <br>
                     <br><br>
-                    <div id="">
-                        <div class="panel pt-xs pb-xs">
-                            <div id="form-holder">
-                                <form class="new-msg" id="message-form">
-                                    <h2 class="annonce-detail-title-rep">
-                                        <span><i class="fa fa-comments-o"></i>Contacter le destinataire</span>
-                                    </h2>
-                                    <input type="hidden" name="id_destinataire" value="1" />
-                                    <input type="hidden" name="id_expediteur" value="2" /> <!-- Utilisez l'ID de l'utilisateur authentifié -->
-                                    <textarea class="reset-input" id="msg-target" name="msg" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
-                                    <div class="text-center mt-md">
-                                        <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
-                                            <i class="fa fa-envelope"></i>
-                                            Envoyer
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                   <div id="">
+    <div class="panel pt-xs pb-xs">
+        <div id="form-holder">
+            <form class="new-msg" id="message-form">
+                <h2 class="annonce-detail-title-rep">
+                    <span><i class="fa fa-comments-o"></i>Contacter le destinataire</span>
+                </h2>
+                <!-- Utilisez l'ID de l'utilisateur authentifié comme valeur de id_expediteur -->
+                <input type="hidden" id="id_expediteur" name="id_expediteur" value="{{ Auth::id() }}">
+                <input type="hidden" name="id_destinataire" value="1" />
+                <textarea class="reset-input" id="msg-target" name="message" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
+                <div class="text-center mt-md">
+                    <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
+                        <i class="fa fa-envelope"></i>
+                        Envoyer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
                 </div>
             </div>
         </div>
@@ -215,7 +217,10 @@
     <script src="{{ asset('assets\js\script2.js') }}"></script>
     <script src="{{ asset('assets\js\script3.js') }}"></script>
     <script src="{{ asset('assets\js\user.js') }}"></script><!-- Ajoutez jQuery -->
-    <script>
+  <script>
+    var warningDisplayed = false; // Variable pour suivre si l'avertissement a déjà été affiché
+
+    // Fonction pour envoyer le message
     function sendMessage() {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         var formData = new FormData(document.getElementById('message-form'));
@@ -240,8 +245,8 @@
                 });
 
                 setTimeout(function() {
-                    var annonce_id = '{{ session('annonce_id') }}';
-                    window.location.href = "{{ route('annonces.details', ['id' => 'annonce_id']) }}".replace('annonce_id', annonce_id);
+                    // Rediriger vers la page des messages après avoir affiché le message de succès
+                    window.location.href = "{{ route('messages') }}";
                 }, 2000);
             },
             error: function(xhr, status, error) {
@@ -255,7 +260,51 @@
             }
         });
     }
+
+    // Fonction pour afficher un avertissement si l'utilisateur n'est pas connecté
+    function showWarningMessage() {
+        if (!warningDisplayed) { // Vérifier si l'avertissement n'a pas déjà été affiché
+            warningDisplayed = true; // Marquer l'avertissement comme déjà affiché
+            Swal.fire({
+                title: "Vous devez d'abord vous connecter",
+                html: "<p>Pour récupérer cet article, veuillez d'abord vous connecter.</p>",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Connexion'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de connexion
+                    window.location.href = "{{ route('afficherFormulaireConnexion') }}";
+                }
+            });
+        }
+    }
+
+    // Fonction pour activer l'édition du message si l'utilisateur est connecté
+    function enableMessageEditing() {
+        // Récupérer l'élément textarea
+        var messageTextarea = document.getElementById('msg-target');
+
+        // Ajouter un gestionnaire d'événements pour le focus
+        messageTextarea.addEventListener('focus', function() {
+            // Vérifier si l'utilisateur est connecté
+            @if(session()->has('user'))
+                // Si l'utilisateur est connecté, ne rien faire
+            @else
+                // Si l'utilisateur n'est pas connecté, afficher l'avertissement
+                showWarningMessage();
+                // Retirer le focus du textarea pour empêcher l'édition du message
+                this.blur();
+            @endif
+        });
+    }
+
+    // Appeler la fonction pour activer l'édition du message
+    enableMessageEditing();
 </script>
+
 
 
 </body>
