@@ -11,15 +11,13 @@
     <title>Tabaraa</title>
 </head>
 
-
-
 <body id="page-detta">
 
-    @if(session()->has('user'))
+      @if(session()->has('user') && session('user'))
     <header class="tabaraa-header">
         @include('components.userAuth.header')
     </header>
-        @include('components.userAuth.ham_nav')
+    @include('components.userAuth.ham_nav')
     @else
     <header class="tabaraa-header">
         @include('components.userNotAuth.header')
@@ -116,22 +114,40 @@
                                 </div>
                                 <script>
                                     function showSuccessMessage() {
-                                        // Ici vous pouvez effectuer une requête Ajax ou une autre opération
-                                        // Au lieu d'une alerte, vous pouvez utiliser SweetAlert pour afficher un message de succès
+                                        @if(session()->has('user'))
+                                            // Ici vous pouvez effectuer une requête Ajax ou une autre opération
+                                            // Au lieu d'une alerte, vous pouvez utiliser SweetAlert pour afficher un message de succès
 
-                                        // Par exemple, imaginons que vous avez reçu une réponse de votre requête Ajax
-                                        var data = {
-                                            code: 1
-                                        };
+                                            // Par exemple, imaginons que vous avez reçu une réponse de votre requête Ajax
+                                            var data = {
+                                                code: 1
+                                            };
 
-                                        // Vérifiez si la réponse de la requête est 1 (succès)
-                                        if (data.code === 1) {
-                                            // Affichage d'un message de succès avec SweetAlert
+                                            // Vérifiez si la réponse de la requête est 1 (succès)
+                                            if (data.code === 1) {
+                                                // Affichage d'un message de succès avec SweetAlert
+                                                Swal.fire({
+                                                    title: "Votre demande a été effectuée avec succès",
+                                                    icon: "success"
+                                                });
+                                            }
+                                        @else
+                                            // L'utilisateur n'est pas connecté, affichez un message lui demandant de se connecter
                                             Swal.fire({
-                                                title: "Votre demande a été effectuée avec succès",
-                                                icon: "success"
+                                                title: "Vous devez d'abord vous connecter",
+                                                html: "<p>Pour récupérer cet article, veuillez d'abord vous connecter.</p>",
+                                                icon: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Connexion'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // Rediriger vers la page de connexion
+                                                    window.location.href = "{{ route('afficherFormulaireConnexion') }}";
+                                                }
                                             });
-                                        }
+                                        @endif
                                     }
                                 </script>
                             </div>
@@ -140,29 +156,28 @@
 
                     <br>
                     <br><br>
-                    <div id="">
-                        <div class="panel pt-xs pb-xs">
-                            <div id="form-holder">
-                                <form class="new-msg" id="message-form">
-                                    <h2 class="annonce-detail-title-rep">
-                                        <span><i class="fa fa-comments-o"></i>Contacter le destinataire</span>
-                                    </h2>
-                                    <input type="hidden" name="id_destinataire" value="1" />
-                                    <input type="hidden" name="id_expediteur" value="2" /> <!-- Utilisez l'ID de l'utilisateur authentifié -->
-                                    <textarea class="reset-input" id="msg-target" name="msg" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
-                                    <div class="text-center mt-md">
-                                        <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
-                                            <i class="fa fa-envelope"></i>
-                                            Envoyer
-                                        </button>
-                                    </div>
-                                </form>
+                   <div id="">
+    <div class="panel pt-xs pb-xs">
+        <div id="form-holder">
+            <form class="new-msg" id="message-form">
+                <h2 class="annonce-detail-title-rep">
+                    <span><i class="fa fa-comments-o"></i>Contacter le destinataire</span>
+                </h2>
+                <!-- Utilisez l'ID de l'utilisateur authentifié comme valeur de id_expediteur -->
+                <input type="hidden" id="id_expediteur" name="id_expediteur" value="{{ Auth::id() }}">
+                <input type="hidden" name="id_destinataire" value="1" />
+                <textarea class="reset-input" id="msg-target" name="message" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
+                <div class="text-center mt-md">
+                    <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
+                        <i class="fa fa-envelope"></i>
+                        Envoyer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -202,52 +217,95 @@
     <script src="{{ asset('assets\js\script2.js') }}"></script>
     <script src="{{ asset('assets\js\script3.js') }}"></script>
     <script src="{{ asset('assets\js\user.js') }}"></script><!-- Ajoutez jQuery -->
-    <script>
-        function sendMessage() {
-            // Récupérer le jeton CSRF depuis la balise meta
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+  <script>
+    var warningDisplayed = false; // Variable pour suivre si l'avertissement a déjà été affiché
 
-            // Récupérer les données du formulaire
-            var formData = new FormData(document.getElementById('message-form'));
+    // Fonction pour envoyer le message
+    function sendMessage() {
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var formData = new FormData(document.getElementById('message-form'));
+        formData.append('_token', csrfToken);
 
-            // Ajouter le jeton CSRF à la requête
-            formData.append('_token', csrfToken);
+        var current_url = window.location.href;
+        sessionStorage.setItem('redirect_url', current_url);
 
-            // Envoyer les données via AJAX à la route broadcast
-            $.ajax({
-                url: "{{ route('broadcast') }}",
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    // Afficher une notification de succès avec SweetAlert2
-                    Swal.fire({
-                        title: 'Message envoyé !',
-                        text: 'Votre message a été envoyé avec succès.',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 5000 // Ferme automatiquement la notification après 1.5 seconde
-                    });
+        $.ajax({
+            url: "{{ route('broadcast') }}",
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                Swal.fire({
+                    title: 'Message envoyé !',
+                    text: 'Votre message a été envoyé avec succès.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
 
-                    // Rediriger vers la page des messages après 2 secondes
-                    setTimeout(function() {
-                        window.location.href = "{{ route('messages') }}";
-                    }, 2000);
-                },
-                error: function(xhr, status, error) {
-                    // Afficher une notification d'erreur avec SweetAlert2
-                    Swal.fire({
-                        title: 'Erreur !',
-                        text: 'Une erreur s\'est produite lors de l\'envoi du message.',
-                        icon: 'error',
-                        showConfirmButton: false,
-                        timer: 5000 // Ferme automatiquement la notification après 1.5 seconde
-                    });
+                setTimeout(function() {
+                    // Rediriger vers la page des messages après avoir affiché le message de succès
+                    window.location.href = "{{ route('messages') }}";
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    title: 'Erreur !',
+                    text: 'Une erreur s\'est produite lors de l\'envoi du message.',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            }
+        });
+    }
+
+    // Fonction pour afficher un avertissement si l'utilisateur n'est pas connecté
+    function showWarningMessage() {
+        if (!warningDisplayed) { // Vérifier si l'avertissement n'a pas déjà été affiché
+            warningDisplayed = true; // Marquer l'avertissement comme déjà affiché
+            Swal.fire({
+                title: "Vous devez d'abord vous connecter",
+                html: "<p>Pour récupérer cet article, veuillez d'abord vous connecter.</p>",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Connexion'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de connexion
+                    window.location.href = "{{ route('afficherFormulaireConnexion') }}";
                 }
             });
         }
-    </script>
+    }
+
+    // Fonction pour activer l'édition du message si l'utilisateur est connecté
+    function enableMessageEditing() {
+        // Récupérer l'élément textarea
+        var messageTextarea = document.getElementById('msg-target');
+
+        // Ajouter un gestionnaire d'événements pour le focus
+        messageTextarea.addEventListener('focus', function() {
+            // Vérifier si l'utilisateur est connecté
+            @if(session()->has('user'))
+                // Si l'utilisateur est connecté, ne rien faire
+            @else
+                // Si l'utilisateur n'est pas connecté, afficher l'avertissement
+                showWarningMessage();
+                // Retirer le focus du textarea pour empêcher l'édition du message
+                this.blur();
+            @endif
+        });
+    }
+
+    // Appeler la fonction pour activer l'édition du message
+    enableMessageEditing();
+</script>
+
+
 
 </body>
 

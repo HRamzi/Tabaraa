@@ -89,11 +89,12 @@ Route::get('/annonces/cree', [CreeAnnonceController::class, 'creeAnnonce'])->nam
 Route::post('/annonces', [CreeAnnonceController::class, 'store'])->name('annonces.store');
 Route::post('/annonces/recherche', [CreeAnnonceController::class, 'recherche'])->name('rechercher');
 Route::put('/annonces/{annonce}/modifier', [CreeAnnonceController::class, 'formulaireModifierAnnonce'])->name('annonces.modifier');
-Route::post('/annonces/{annonce}', [CreeAnnonceController::class, 'modifierAnnonce'])->name('annonces.update');
+Route::post('/annonces/{annonce}', [recupererAnnonce::class, 'modifierAnnonce'])->name('annonces.update');
 Route::delete('/annonces/{id}', [CreeAnnonceController::class, 'supprimerAnnonce'])->name('annonces.supprimer');
 
 
 // Routes pour afficher les détails d'une annonce
+// Modifier le fichier de routes pour inclure la route 'annonces.details' avec la méthode GET
 Route::get('/annonce/{id}', [recupererAnnonce::class, 'detailsAnnonce'])->name('annonces.details');
 
 // Routes pour la messagerie
