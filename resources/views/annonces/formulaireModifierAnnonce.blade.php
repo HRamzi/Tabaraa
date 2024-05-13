@@ -302,11 +302,30 @@
                 </div>
                 <div class="f-container f-content-center text-center pa-md">
                     <div class="f-item">
-                        <button class="btn f-md-40 ma-xs xl blue submit-form" type="submit">Publier</button>
+                        <button class="btn f-md-40 ma-xs xl blue submit-form" type="submit" onclick="showSuccessMessage()">Publier</button>
                     </div>
                 </div>
             </form>
         </div>
+
+        <script>
+            function showSuccessMessage() {
+                var data = {
+                    code: 1
+                };
+    
+                // Vérifiez si la réponse de la requête est 1 (succès)
+                if (data.code === 1) {
+                    // Affichage d'un message de succès avec SweetAlert
+                    Swal.fire({
+                        title: "Annonce créée avec succès !",
+                        icon: "success",
+                        timer: 5000
+                    });
+                }
+            }
+        </script>
+
         <div id="dbalpha"></div>
         <div id="dialogBoxContent"></div>
         <div id="toast-box"></div>

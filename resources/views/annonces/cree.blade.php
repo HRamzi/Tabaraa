@@ -301,7 +301,7 @@
                 </div>
                 <div class="f-container f-content-center text-center pa-md">
                     <div class="f-item">
-                        <button class="btn f-md-40 ma-xs xl blue submit-form" type="submit">Publier</button>
+                        <button class="btn f-md-40 ma-xs xl blue submit-form" type="submit" onclick="showSuccessMessage()">Publier</button>
                     </div>
                 </div>
             </form>

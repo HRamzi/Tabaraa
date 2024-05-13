@@ -246,7 +246,7 @@
                     </div>
 
                     <div class="f-container f-content-center">
-                        <a href="" class="btn lg red f-item f-md-33 text-center ma-xs"><i class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
+                        <a href="{{ route('profile') }}" class="btn lg red f-item f-md-33 text-center ma-xs"><i class="fa fa-chevron-left"></i>&nbsp;Annuler</a>
                         <button type="submit" class="btn lg f-item blue f-md-33 text-center ma-xs"><i class="fa fa-check"></i>&nbsp;Valider</button>
                     </div>
                 </form>

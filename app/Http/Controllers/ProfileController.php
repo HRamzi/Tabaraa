@@ -75,7 +75,7 @@ class ProfileController extends Controller
         // Logique pour modifier le numéro de téléphone de l'utilisateur
         $user = auth()->user();
         $user->numero_telephone = $request->input('nouveau_numero_telephone');
-        $user->Utilisateur::save();
+        $user->save();
 
         return redirect()->back()->with('success', 'Numéro de téléphone mis à jour avec succès.');
     }

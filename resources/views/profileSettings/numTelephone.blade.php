@@ -22,7 +22,7 @@
     @include('components.userAuth.ham_nav')
 
     <div class="global-shadow"></div>
-    <div class="deco-bg">
+<div class="deco-bg">
         <div class="container main-bg">
             <h1 class="rep"><i class="fa fa-envelope-o mr-xs"></i>Modification nom d'utilisateur</h1>
             <div class="panel pa-xl ma-xs">
@@ -63,7 +63,7 @@
                 </form>
             </div>
         </div>
-    </div>
+
 
     <script>
         function showSuccessMessage() {
@@ -135,17 +135,17 @@
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     </div>
 
-    <footer class="footer">
+        <footer class="footer">
 
 
-        <ul class="menu">
-            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
-            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact </a></li>
+            <ul class="menu">
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact </a></li>
 
-        </ul>
-        <p>&copy;2024 Tabaraa | Tous droits réservés</p>
-    </footer>
-    </div>
+            </ul>
+            <p>&copy;2024 Tabaraa | Tous droits réservés</p>
+        </footer>
+</div>
 
     <script>
         var $globals = {
