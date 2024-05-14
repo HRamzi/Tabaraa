@@ -60,7 +60,8 @@
                             </div>
 
                             <a href="{{ route('mesAnnonces') }}" class="btn f-item" title="Mes annonces"><i class="fa fa-archive"></i><span class="label">Mes annonces</span></a>
-                            <a href="{{ route('afficher_modifier_numero_telephone') }}" class="btn f-item" title="Modifier_Numero_Telephone"><i class="fa fa-user"></i><span class="label">Modifier Numéro Telephone</span></a>
+                            <a href="{{ route('afficher_modifier_nom_complet') }}" class="btn f-item" title="Modifier_Nom_Complet"><i class="fa fa-user"></i><span class="label">Modifier Le Nom</span></a>
+                            <a href="{{ route('afficher_modifier_numero_telephone') }}" class="btn f-item" title="Modifier_Numero_Telephone"><i class="fa fa-phone"></i><span class="label">Modifier Numéro Telephone</span></a>
                             <a href="{{ route('afficher_modifier_mot_de_passe') }}" class="btn f-item" title="Modifier_mot_de_passe"><i class="fa fa-lock"></i><span class="label">Modifier mot de passe</span></a>
                             <a href="{{ route('afficher_supprimer_Compte') }}" class="btn f-item suppression-compte" title="Supprimer_mon_compte"><i class="fa fa-user-times"></i><span class="label">Supprimer mon compte</span></a>
                             <br><br>

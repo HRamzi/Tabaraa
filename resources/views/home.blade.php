@@ -272,7 +272,7 @@
             </div>
 
             <ul class="menu">
-                <li class="menu__item"><a class="menu__link" href="#">Accueil</a></li>
+                <li class="menu__item"><a class="menu__link" href="{{ route('home') }}">Accueil</a></li>
                 <li class="menu__item"><a class="menu__link" href="">Contact : Tabaraa.dz@gmail.com</a></li>
 
             </ul>

@@ -143,7 +143,7 @@ class CreeAnnonceController extends Controller
             $annonce->update(['photo' => $photoPath]);
         }
 
-        return redirect('/user-home')->with('success', 'Annonce mise à jour avec succès.');
+        return redirect('/mesAnnonces')->with('success', 'Annonce mise à jour avec succès.');
     }
 
     public function supprimerAnnonce($id)

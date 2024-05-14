@@ -11,8 +11,11 @@ use App\Http\Controllers\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminAnnonceController;
 use App\Http\Controllers\MotDePasseOublieController;
+<<<<<<< HEAD
 use App\Http\Controllers\NotificationController;
 
+=======
+>>>>>>> d255b87c5d2a08e87114c4b5dfa5a8a284399602
 
 Route::get('/', [HomeController::class, 'afficherHomeAnnonces']);
 Route::get('/home', [HomeController::class, 'afficherHomeAnnonces'])->name('home');
@@ -50,11 +53,13 @@ Route::prefix('admin')->group(function () {
 Route::post('/recuperer-annonce/{annonce}', [recupererAnnonce::class, 'recupererAnnonce'])->name('recupererAnnonce');
 // Routes pour la gestion du profil utilisateur
 Route::prefix('profile')->middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
-   Route::get('/mesAnnonces', [ProfileController::class, 'mesAnnonces'])->name('mesAnnonces');
-  Route::get('/modifier-mot-de-passe', [ProfileController::class, 'afficherModifierMotDePasse'])->name('afficher_modifier_mot_de_passe');
-    Route::post('/modifier-mot-de-passe', [ProfileController::class, 'modifierMotDePasse'])->name('modifier_mot_de_passe');  
-   Route::get('/modifier-numero-telephone', [ProfileController::class, 'afficherFormulaireModifierNumeroTelephone'])->name('afficher_modifier_numero_telephone');
+    Route::get('/', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('/mesAnnonces', [ProfileController::class, 'mesAnnonces'])->name('mesAnnonces');
+    Route::get('/modifier-nom-complet', [ProfileController::class, 'afficherModifierNom'])->name('afficher_modifier_nom_complet');
+    Route::post('/modifier', [ProfileController::class, 'modifierNom'])->name('modifier_Nom_Complet');
+    Route::get('/modifier-mot-de-passe', [ProfileController::class, 'afficherModifierMotDePasse'])->name('afficher_modifier_mot_de_passe');
+    Route::post('/modifier-mot-de-passe', [ProfileController::class, 'modifierMotDePasse'])->name('modifier_mot_de_passe');
+    Route::get('/modifier-numero-telephone', [ProfileController::class, 'afficherFormulaireModifierNumeroTelephone'])->name('afficher_modifier_numero_telephone');
     Route::post('/verifier-Numero-telephone', [ProfileController::class, 'verifierNumeroTelephone'])->name('verifierNumeroTelephone');
     Route::post('/modifier-numero-telephone', [ProfileController::class, 'modifierNumeroTelephone'])->name('modifier_numero_telephone');
     Route::get('/supprimer-compte', [ProfileController::class, 'afficherSupprimerCompte'])->name('afficher_supprimer_Compte');
@@ -62,7 +67,7 @@ Route::prefix('profile')->middleware('auth')->group(function () {
 });
 Route::get('/mot-de-passe-oublie', [MotDePasseOublieController::class, 'afficherFormulaire'])->name('oublie_mot_de_passe');
 Route::post('/mot-de-passe-oublie', [MotDePasseOublieController::class, 'reinitialiserMotDePasse'])->name('reinitialiser_mot_de_passe');
- 
+
 // Autres routes pour les utilisateurs non authentifiés
 Route::prefix('userNotAuth')->group(function () {
     Route::get('/categories/vetements', [recupererAnnonce::class, 'afficherAnnoncesVetement'])->name('vetement');
@@ -89,7 +94,7 @@ Route::get('/annonces/cree', [CreeAnnonceController::class, 'creeAnnonce'])->nam
 Route::post('/annonces', [CreeAnnonceController::class, 'store'])->name('annonces.store');
 Route::post('/annonces/recherche', [CreeAnnonceController::class, 'recherche'])->name('rechercher');
 Route::put('/annonces/{annonce}/modifier', [CreeAnnonceController::class, 'formulaireModifierAnnonce'])->name('annonces.modifier');
-Route::post('/annonces/{annonce}', [recupererAnnonce::class, 'modifierAnnonce'])->name('annonces.update');
+Route::post('/annonces/{annonce}', [CreeAnnonceController::class, 'modifierAnnonce'])->name('annonces.update');
 Route::delete('/annonces/{id}', [CreeAnnonceController::class, 'supprimerAnnonce'])->name('annonces.supprimer');
 
 
