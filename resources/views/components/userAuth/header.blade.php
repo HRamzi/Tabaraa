@@ -217,22 +217,27 @@
 }
 
         // Fonction pour mettre à jour le compteur de notifications
-        function updateNotificationCounter() {
-            $.ajax({
-                url: "{{ route('getNotificationCount') }}",
-                method: "GET",
-                success: function (data) {
-                    if (data.count > 0) {
-                        $('#notification-counter').text(data.count); // Met à jour le compteur de notifications
-                    } else {
-                        $('#notification-counter').text(''); // Cache le compteur de notifications s'il est égal à 0
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
+       // Fonction pour mettre à jour le compteur de notifications
+function updateNotificationCounter() {
+    $.ajax({
+        url: "{{ route('getNotificationCount') }}",
+        method: "GET",
+        success: function (data) {
+            if (data.count > 0) {
+                if (data.count > 9) {
+                    $('#notification-counter').text('+9'); // Affiche "+9" si le compteur dépasse 9
+                } else {
+                    $('#notification-counter').text(data.count); // Affiche le nombre normal sinon
                 }
-            });
+            } else {
+                $('#notification-counter').text(''); // Cache le compteur de notifications s'il est égal à 0
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
         }
+    });
+}
 
         // Fonction pour obtenir les notifications
         function getNotifications() {
