@@ -78,7 +78,7 @@
                             onclick="suivant()">
                             Suivant <i class="fa fa-chevron-right"></i>
                         </button>
-                        <a href="{{ route('userHome') }}"
+                        <a href="{{ route('home') }}"
                             class="btn lg red f-item f-md-33 text-center ma-xs"><i
                                 class="fa fa-chevron-left"></i>&nbsp;Retour</a>
                         <!-- Afficher le bouton de soumission uniquement si l'email est valide -->

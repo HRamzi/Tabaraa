@@ -13,7 +13,7 @@
 
 <body id="page-detta">
 
-      @if(session()->has('user') && session('user'))
+    @if(session()->has('user') && session('user'))
     <header class="tabaraa-header">
         @include('components.userAuth.header')
     </header>
