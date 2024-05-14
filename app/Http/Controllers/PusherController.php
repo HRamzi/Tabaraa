@@ -19,19 +19,19 @@ class PusherController extends Controller
         return view('message.index', compact('messages'));
     }
 
-    public function markAllMessagesAsRead(Request $request) {
-        // Mettre à jour toutes les entrées de message comme lues
-        $updated = Message::query()->update(['read' => true]);
+public function markAllMessagesAsRead(Request $request)
+{
+    try {
+        // Mettre à jour tous les messages comme lus
+        Message::query()->update(['read' => true]);
 
-        // Vérifiez si la mise à jour a réussi
-        if ($updated) {
-            // Retourner une réponse JSON pour indiquer le succès
-            return response()->json(['success' => true]);
-        } else {
-            // Retourner une réponse JSON pour indiquer l'échec
-            return response()->json(['success' => false]);
-        }
+        // Rediriger vers la route des messages
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        // Gérer l'erreur
+        return response()->json(['success' => false, 'error' => $e->getMessage()]);
     }
+}
 
     public function broadcast(Request $request)
 {

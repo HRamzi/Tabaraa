@@ -5154,7 +5154,26 @@ textarea {
     z-index: 1;
     /* Pour le rendre au-dessus de l'icône */
 }
+#notification-counter {
+        font-size: 16px;
+        /* Ajustez la taille de la police selon vos besoins */
+        width: 20px;
+        /* Ajustez la largeur selon vos besoins */
+        height: 20px;
+        /* Ajustez la hauteur selon vos besoins */
+        line-height: 20px;
+        /* Ajustez la hauteur de ligne selon vos besoins */
+        border-radius: 50%;
+        /* Pour rendre le badge circulaire */
+        text-align: center;
+        /* Centrer le texte horizontalement */
+        font-weight: bold;
+        /* Texte en gras */
+    }
 
+    #message-counter.show {
+        display: inline-block;
+    }
 #message-counter {
     font-size: 16px;
     /* Ajustez la taille de la police selon vos besoins */
@@ -5175,7 +5194,41 @@ textarea {
 #message-counter.show {
     display: inline-block;
 }
+/* Ajoutez ces styles CSS à votre fichier styles.css */
+.notification-list {
+    list-style: none;
+    padding: 0;
+}
 
+.notification-item {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.page-bottom {
+    background-color: #f5f5f5;
+    padding: 20px 0;
+}
+
+.page-bottom-promote,
+.page-bottom-illustrate {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.footer p {
+    margin: 0;
+}
 /* Style pour le bouton lorsqu'il est survolé */
 .btn-light:hover {
     background-color: #f0f0f0;

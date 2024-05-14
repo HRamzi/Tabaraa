@@ -11,6 +11,9 @@ use App\Http\Controllers\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminAnnonceController;
 use App\Http\Controllers\MotDePasseOublieController;
+use App\Http\Controllers\NotificationController;
+
+
 Route::get('/', [HomeController::class, 'afficherHomeAnnonces']);
 Route::get('/home', [HomeController::class, 'afficherHomeAnnonces'])->name('home');
 
@@ -44,7 +47,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/annonces/{annonce}', [AdminAnnonceController::class, 'show'])->name('admin.annonces.show');
     Route::delete('/annonces/{annonce}', [AdminAnnonceController::class, 'destroy'])->name('admin.annonces.destroy');
 });
-
+Route::post('/recuperer-annonce/{annonce}', [recupererAnnonce::class, 'recupererAnnonce'])->name('recupererAnnonce');
 // Routes pour la gestion du profil utilisateur
 Route::prefix('profile')->middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
@@ -101,3 +104,6 @@ Route::get('/unread-message-count', [PusherController::class, 'getUnreadMessageC
 Route::get('/message-count', [PusherController::class, 'getMessageCount'])->name('getMessageCount');
 Route::post('/broadcast', [PusherController::class, 'broadcast'])->name('broadcast');
 Route::post('/mark-all-messages-as-read', [PusherController::class, 'markAllMessagesAsRead'])->name('markAllMessagesAsRead');
+Route::get('/get-notifications', [NotificationController::class, 'getNotifications'])->name('getNotifications');
+Route::get('/notification/count', [NotificationController::class, 'getNotificationCount'])->name('getNotificationCount');
+Route::get('/notifications', [NotificationController::class, 'showNotificationsView'])->name('notifications');

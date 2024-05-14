@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Message; 
 use App\Models\Annonce;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Utilisateur;
+ use App\Models\Notification; // Ajoutez ceci en haut de votre fichier de contrôleur
 
 class recupererAnnonce extends Controller
 {
@@ -133,6 +135,46 @@ public function detailsAnnonce($id)
 
     // Passer les détails à la vue
     return view('annonces.details', compact('annonce'));
+}
+
+
+public function recupererAnnonce(Request $request, $annonceId)
+{
+    // Vérifier si l'utilisateur est connecté
+    if (auth()->check()) {
+        // Récupérer l'utilisateur connecté
+        $utilisateurConnecte = auth()->user();
+
+        // Récupérer l'annonce à partir de l'ID
+        $annonce = Annonce::find($annonceId);
+
+        // Vérifier si l'annonce existe
+        if (!$annonce) {
+            return response()->json(['error' => 'L\'annonce n\'existe pas.'], 404);
+        }
+
+        // Vérifier si l'utilisateur connecté est l'auteur de l'annonce
+        if ($utilisateurConnecte->id != $annonce->id_utilisateur) {
+            // Envoyer la demande à l'utilisateur qui a créé l'annonce
+            $utilisateurConnecte->envoyerDemandeRecuperation($annonceId);
+
+            // Créer une notification
+            Notification::create([
+                'user_id' => $annonce->id_utilisateur,
+                'annonce_id' => $annonce->id,
+                'message' => 'Votre annonce "' . $annonce->titre . '" a reçu une demande de récupération de la part de ' . $utilisateurConnecte->Nom_Complet
+            ]);
+
+            // Retourner une réponse JSON avec un message de succès
+            return response()->json(['message' => 'Votre demande a été envoyée avec succès à '.$annonce->utilisateur->Nom_Complet.'.'], 200);
+        } else {
+            // L'utilisateur est l'auteur de l'annonce, ne peut pas récupérer sa propre annonce
+            return response()->json(['error' => 'Vous ne pouvez pas récupérer votre propre annonce.'], 403);
+        }
+    } else {
+        // L'utilisateur n'est pas connecté, retourner une réponse JSON avec un message d'erreur
+        return response()->json(['error' => 'Vous devez vous connecter pour envoyer une demande de récupération.'], 401);
+    }
 }
 
 

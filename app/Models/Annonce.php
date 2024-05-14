@@ -10,7 +10,6 @@ class Annonce extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'id_utilisateur',
         'titre',
         'categorie',
@@ -29,10 +28,11 @@ class Annonce extends Model
     {
         return $this->belongsTo(Categorie::class, 'id');
     }
+
     public static function rechercher($termes)
     {
         return Annonce::where('titre', 'like', '%' . $termes . '%')
-                    ->orWhere('description', 'like', '%' . $termes . '%')
-                    ->get();
+            ->orWhere('description', 'like', '%' . $termes . '%')
+            ->get();
     }
 }

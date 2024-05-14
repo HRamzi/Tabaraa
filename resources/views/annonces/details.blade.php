@@ -107,49 +107,65 @@
                                     </span>
                                 </div>
                                 @endif
-                                <div class="infos text-center mt-4">
-                                    <button class="btn btn-success" onclick="showSuccessMessage()">
-                                        <i class="fa fa-check"></i> Je le Récupère
-                                    </button>
-                                </div>
+                                   <div class="infos text-center mt-4">
+        <button class="btn btn-success" onclick="sendRecoveryRequest()">
+            <i class="fa fa-check"></i> Je le Récupère
+        </button>
+    </div>
+
                                 <script>
-                                    function showSuccessMessage() {
-                                        @if(session()->has('user'))
-                                            // Ici vous pouvez effectuer une requête Ajax ou une autre opération
-                                            // Au lieu d'une alerte, vous pouvez utiliser SweetAlert pour afficher un message de succès
-
-                                            // Par exemple, imaginons que vous avez reçu une réponse de votre requête Ajax
-                                            var data = {
-                                                code: 1
-                                            };
-
-                                            // Vérifiez si la réponse de la requête est 1 (succès)
-                                            if (data.code === 1) {
-                                                // Affichage d'un message de succès avec SweetAlert
-                                                Swal.fire({
-                                                    title: "Votre demande a été effectuée avec succès",
-                                                    icon: "success"
-                                                });
-                                            }
-                                        @else
-                                            // L'utilisateur n'est pas connecté, affichez un message lui demandant de se connecter
-                                            Swal.fire({
-                                                title: "Vous devez d'abord vous connecter",
-                                                html: "<p>Pour récupérer cet article, veuillez d'abord vous connecter.</p>",
-                                                icon: "warning",
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Connexion'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    // Rediriger vers la page de connexion
-                                                    window.location.href = "{{ route('afficherFormulaireConnexion') }}";
-                                                }
-                                            });
-                                        @endif
-                                    }
-                                </script>
+    // Fonction pour envoyer une demande de récupération
+    function sendRecoveryRequest() {
+        // Vérifier si l'utilisateur est connecté
+        @if(session()->has('user'))
+            // Si l'utilisateur est connecté, envoyer une requête Ajax pour récupérer l'annonce
+            var annonceId = "{{ $annonce->id }}"; // Récupérer l'ID de l'annonce
+            $.ajax({
+                url: "/recuperer-annonce/" + annonceId,
+                type: "POST",
+                dataType: "json",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                   Swal.fire({
+                        title: "Demande envoyée avec succès",
+                        text: "Votre demande a été envoyée au créateur de l'annonce.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Afficher un message d'erreur
+                    Swal.fire({
+                        title: "Erreur",
+                        text: "Une erreur s'est produite lors de l'envoi de votre demande.",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }
+            });
+        @else
+            // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+            Swal.fire({
+                title: "Vous devez vous connecter",
+                text: "Pour récupérer cet article, veuillez d'abord vous connecter.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Connexion'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de connexion
+                    window.location.href = "{{ route('afficherFormulaireConnexion') }}";
+                }
+            });
+        @endif
+    }
+</script>     
                             </div>
                         </div>
                     </div>

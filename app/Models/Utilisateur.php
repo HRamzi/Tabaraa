@@ -9,7 +9,6 @@ class Utilisateur extends Authenticatable
 {
     use Notifiable;
 
-    // Définir les attributs mass assignable
     protected $fillable = [
         'Nom_Complet',
         'email',
@@ -18,4 +17,31 @@ class Utilisateur extends Authenticatable
         'photo_profile',
         'role',
     ];
+
+    public function annonces()
+    {
+        return $this->hasMany(Annonce::class, 'id_utilisateur');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function envoyerDemandeRecuperation($annonceId)
+    {
+        $annonce = Annonce::find($annonceId);
+
+        if (!$annonce) {
+            return false;
+        }
+
+        if ($this->id != $annonce->id_utilisateur) {
+            return false;
+        }
+
+        // Logique d'envoi de la demande de récupération
+
+        return true;
+    }
 }
