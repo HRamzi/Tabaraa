@@ -11,11 +11,8 @@ use App\Http\Controllers\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminAnnonceController;
 use App\Http\Controllers\MotDePasseOublieController;
-<<<<<<< HEAD
 use App\Http\Controllers\NotificationController;
 
-=======
->>>>>>> d255b87c5d2a08e87114c4b5dfa5a8a284399602
 
 Route::get('/', [HomeController::class, 'afficherHomeAnnonces']);
 Route::get('/home', [HomeController::class, 'afficherHomeAnnonces'])->name('home');
