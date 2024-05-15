@@ -22,7 +22,7 @@
         <div class="ham-content">
             <a href="{{ route('profile') }}" title="Gérer mon compte">Mon compte</a>
             <a href="{{ route('mesAnnonces') }}" title="Voir la liste de mes annonces">Mes annonces</a>
-            <a href="{{ route('annonces.cree') }}" title="Publier une annonce">Créer une annonce</a>
+            <a href="{{ route('annonces.create') }}" title="Publier une annonce">Créer une annonce</a>
             <a href="{{ route('deconnexion') }}" rel="nofollow">Se déconnecter</a>
         </div>
     </div>

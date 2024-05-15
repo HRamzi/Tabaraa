@@ -9,35 +9,35 @@ use App\Models\Categorie;
 
 class CreeAnnonceController extends Controller
 {
-    public function creeAnnonce(Request $request)
+  public function create()
     {
-        // Vérifier si l'utilisateur est connecté
-        if (Auth::check()) {
-            // Récupérer toutes les annonces
-            $annonces = Annonce::all();
-            $categories = Categorie::all();
-            return view('annonces.cree', ['annonces' => $annonces, 'categories' => $categories]);
-        } else {
-            return redirect('/connexion')->with('error', 'Vous devez être connecté pour créer une annonce.');
-        }
+        // Récupérer toutes les catégories
+        $categories = Categorie::all();
+        return view('annonces.cree', ['categories' => $categories]);
     }
-
 
     public function store(Request $request)
     {
         // Valider les données du formulaire
         $request->validate([
             'titre' => 'required|string|max:255|filled',
+            'categorie' => 'required|string|max:255',
             'ville' => 'required|string|max:255',
             'numero_telephone' => 'required|string|max:20',
-            'description' => 'required|string',
             'photo' => 'required|image|max:2048',
+            'description' => 'required|string',
         ], [
             'titre.required' => 'Le titre est requis.',
             'titre.filled' => 'Le titre ne peut pas être vide.',
-            'photo.required' => 'La photo est requis.',
+            'categorie.required' => 'La catégorie est requise.',
+            'categorie.filled' => 'La catégorie ne peut pas être vide.',
+            'ville.required' => 'La ville est requise.',
+            'ville.filled' => 'La ville ne peut pas être vide.',
+            'numero_telephone.required' => 'Le numéro de téléphone est requis.',
+            'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
+            'photo.required' => 'La photo est requise.',
             'photo.filled' => 'La photo ne peut pas être vide.',
-            'description.required' => 'La description est requis.',
+            'description.required' => 'La description est requise.',
             'description.filled' => 'La description ne peut pas être vide.',
         ]);
 
@@ -49,24 +49,24 @@ class CreeAnnonceController extends Controller
         $annonce->numero_telephone = $request->numero_telephone;
         $annonce->description = $request->description;
         $annonce->id_utilisateur = auth()->user()->id;
+
         // Enregistrer l'image
         if ($request->hasFile('photo')) {
             if ($request->file('photo')->isValid()) {
                 $imagePath = $request->photo->store('uploads', 'public');
                 $annonce->photo = $imagePath;
             } else {
-                return redirect()->back()->withInput()->with('error', 'Le fichier téléchargé n\'est pas valide.');
+                return response()->json(['code' => 0, 'message' => 'Le fichier téléchargé n\'est pas valide.'], 400);
             }
         } else {
-            return redirect()->back()->withInput()->with('error', 'Veuillez sélectionner une image.');
+            return response()->json(['code' => 0, 'message' => 'Veuillez sélectionner une image.'], 400);
         }
 
         $annonce->save();
 
-        // Rediriger l'utilisateur vers la page d'accueil après la création de l'annonce
-        return redirect('user-home')->with('success', 'Annonce créée avec succès.');
+        // Réponse de succès
+        return response()->json(['code' => 1, 'message' => 'Annonce créée avec succès.'], 200);
     }
-
     public function recherche(Request $request)
 {
     // Validation des données d'entrée

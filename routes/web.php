@@ -88,7 +88,7 @@ Route::prefix('userAuth')->middleware('auth')->group(function () {
 
 // Autres routes pour la création, la modification, etc. d'annonces
 
-Route::get('/annonces/cree', [CreeAnnonceController::class, 'creeAnnonce'])->name('annonces.cree');
+Route::get('/annonces/cree', [CreeAnnonceController::class, 'create'])->name('annonces.create');
 Route::post('/annonces', [CreeAnnonceController::class, 'store'])->name('annonces.store');
 Route::post('/annonces/recherche', [CreeAnnonceController::class, 'recherche'])->name('rechercher');
 Route::put('/annonces/{annonce}/modifier', [CreeAnnonceController::class, 'formulaireModifierAnnonce'])->name('annonces.modifier');

@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
-                <a class="repliable btn  post-holder" href="{{ route('annonces.cree') }}" title="Publier une annonce pour donner un objet">
+                <a class="repliable btn  post-holder" href="{{ route('annonces.create') }}" title="Publier une annonce pour donner un objet">
                     <i class="fa fa-plus"></i>
                     <span class="label">Créer une annonce</span>
                 </a>
