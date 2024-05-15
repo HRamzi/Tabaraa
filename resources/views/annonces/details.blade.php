@@ -13,20 +13,19 @@
 
 <body id="page-detta">
 
-    @if(session()->has('user') && session('user'))
-    <header class="tabaraa-header">
-        @include('components.userAuth.header')
-    </header>
-    @include('components.userAuth.ham_nav')
+    @if(auth()->check())
+        <header class="tabaraa-header">
+            @include('components.userAuth.header')
+        </header>
+        @include('components.userAuth.ham_nav')
     @else
-    <header class="tabaraa-header">
-        @include('components.userNotAuth.header')
-    </header>
-    <div class="ham-nav ham-right" id="nav-global" data-icon="bell" data-title="Tabaraa">
-        @include('components.userNotAuth.ham-nav_ham-right')
-    </div>
+        <header class="tabaraa-header">
+            @include('components.userNotAuth.header')
+        </header>
+        <div class="ham-nav ham-right" id="nav-global" data-icon="bell" data-title="Tabaraa">
+            @include('components.userNotAuth.ham-nav_ham-right')
+        </div>
     @endif
-
     <div class="global-shadow"></div>
     <div class="deco-bg">
         <div class="container main-bg">
