@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminAnnonceController;
 use App\Http\Controllers\MotDePasseOublieController;
+
 use App\Http\Controllers\NotificationController;
 
 
@@ -61,8 +62,7 @@ Route::prefix('profile')->middleware('auth')->group(function () {
     Route::post('/modifier-numero-telephone', [ProfileController::class, 'modifierNumeroTelephone'])->name('modifier_numero_telephone');
     Route::get('/supprimer-compte', [ProfileController::class, 'afficherSupprimerCompte'])->name('afficher_supprimer_Compte');
     Route::post('/supprimer-compte', [ProfileController::class, 'supprimerCompte'])->name('supprimerCompte');
-Route::get('/modifier-nom', [ProfileController::class, 'afficherModifierNom'])->name('afficher_modifier_nom');
-   });
+});
 Route::get('/mot-de-passe-oublie', [MotDePasseOublieController::class, 'afficherFormulaire'])->name('oublie_mot_de_passe');
 Route::post('/mot-de-passe-oublie', [MotDePasseOublieController::class, 'reinitialiserMotDePasse'])->name('reinitialiser_mot_de_passe');
 

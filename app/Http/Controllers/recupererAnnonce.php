@@ -153,13 +153,13 @@ public function recupererAnnonce(Request $request, $annonceId)
             return response()->json(['error' => 'L\'annonce n\'existe pas.'], 404);
         }
 
-        // Créer une notification pour l'utilisateur qui a créé l'annonce
-        $notification = new Notification();
-        $notification->annonce_id = $annonce->id;
-        $notification->message = 'Votre annonce "' . $annonce->titre . '" a reçu une demande de récupération de la part de ' . $utilisateurConnecte->Nom_Complet;
-
         // Vérifier si l'utilisateur connecté est l'auteur de l'annonce
         if ($utilisateurConnecte->id != $annonce->id_utilisateur) {
+            // Créer une notification pour l'utilisateur qui a créé l'annonce
+            $notification = new Notification();
+            $notification->annonce_id = $annonce->id;
+            $notification->message = 'Votre annonce "' . $annonce->titre . '" a reçu une demande de récupération de la part de ' . $utilisateurConnecte->Nom_Complet;
+
             // Envoyer la demande à l'utilisateur qui a créé l'annonce
             $annonce->utilisateur->envoyerDemandeRecuperation($annonceId);
 

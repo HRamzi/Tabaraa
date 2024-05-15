@@ -13,7 +13,8 @@
 
 <body id="page-detta">
 
-    @if(auth()->check())
+    
+   @if(auth()->check())
         <header class="tabaraa-header">
             @include('components.userAuth.header')
         </header>
@@ -26,6 +27,8 @@
             @include('components.userNotAuth.ham-nav_ham-right')
         </div>
     @endif
+
+
     <div class="global-shadow"></div>
     <div class="deco-bg">
         <div class="container main-bg">
@@ -112,11 +115,11 @@
         </button>
     </div>
 
-                                <script>
+                  <script>
     // Fonction pour envoyer une demande de récupération
     function sendRecoveryRequest() {
         // Vérifier si l'utilisateur est connecté
-        @if(session()->has('user'))
+        @if(Auth::check())
             // Si l'utilisateur est connecté, envoyer une requête Ajax pour récupérer l'annonce
             var annonceId = "{{ $annonce->id }}"; // Récupérer l'ID de l'annonce
             $.ajax({
@@ -127,7 +130,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                   Swal.fire({
+                    Swal.fire({
                         title: "Demande envoyée avec succès",
                         text: "Votre demande a été envoyée au créateur de l'annonce.",
                         icon: "success",
@@ -164,7 +167,8 @@
             });
         @endif
     }
-</script>     
+</script>
+
                             </div>
                         </div>
                     </div>
