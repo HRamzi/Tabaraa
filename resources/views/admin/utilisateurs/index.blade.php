@@ -35,14 +35,17 @@
                                             <td>
                                                 <a href="{{ route('admin.users.edit', $utilisateur->id) }}" class="btn" style="background-color: #28a745; color: #fff; padding: 0.375rem 0.75rem; font-size: 1rem; line-height: 1.5; border-radius: 0.25rem;">Modifier</a>
                                                 
-                                                <!-- Formulaire pour supprimer -->
-                                                <form id="deleteForm{{ $utilisateur->id }}" action="{{ route('admin.users.destroy', $utilisateur->id) }}" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $utilisateur->id }}">
-                                                        Supprimer
-                                                    </button>
-                                                </form>
+                                                <!-- Vérifier le rôle de l'utilisateur -->
+                                                @if ($utilisateur->role !== 'admin')
+                                                    <!-- Bouton Supprimer -->
+                                                    <form id="deleteForm{{ $utilisateur->id }}" action="{{ route('admin.users.destroy', $utilisateur->id) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $utilisateur->id }}">
+                                                            Supprimer
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

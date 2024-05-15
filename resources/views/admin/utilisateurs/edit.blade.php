@@ -35,7 +35,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="role">Rôle</label>
-                                <select class="form-control" id="role" name="role" required>
+                                <select class="form-control" id="role" name="role" disabled>
                                     <option value="admin" {{ $utilisateur->role === 'admin' ? 'selected' : '' }}>Admin</option>
                                     <option value="utilisateur" {{ $utilisateur->role === 'utilisateur' ? 'selected' : '' }}>Utilisateur</option>
                                 </select>
