@@ -105,7 +105,7 @@
                             </span>
                         </a>
                     </button>
-
+ &nbsp;&nbsp;&nbsp;
                     <button title="Notifications"
                         class="repliable ham-toggle btn-light position-relative" id="notification-button">
                         <span class="shell">
@@ -115,12 +115,17 @@
                         </span>
                     </button>
 
-                    <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">
-                        <span class="shell">
-                            <img id="profile-photo" src="{{ asset('assets\images\avatar.png') }}"
-                                loading="lazy" decoding="async" alt="Mon avatar">
-                        </span>
-                    </button>
+                &nbsp;&nbsp;&nbsp;
+                     <button title="Accès à mon compte" class="repliable ham-toggle" data-target="nav-user">
+                    <span class="shell">
+                        @php $utilisateur = auth()->user(); @endphp
+                        @if($utilisateur)
+                            <img src="{{ asset('storage/' . $utilisateur->photo_profile) }}" loading="lazy" decoding="async" alt="Mon avatar">
+                        @else
+                        <img src="{{ asset('assets\images\avatar.png') }}" loading="lazy" decoding="async" alt="Mon avatar">
+                        @endif
+                    </span>
+                </button>
                 </div>
             </div>
             <div class="f-container f-content-center spaced" id="global-search">

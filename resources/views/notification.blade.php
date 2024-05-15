@@ -267,6 +267,17 @@
             getNotifications();
         });
     </script>
+        <script src="{{ asset('assets\js\script4.js') }}" type="text/javascript"></script>
+    <script>
+        var $globals = {
+            "API_Options": "{}",
+            "API_Modules": "{}"
+        };
+    </script>
+    <script src="{{ asset('assets\js\script1.js') }}"></script>
+    <script src="{{ asset('assets\js\script2.js') }}"></script>
+    <script src="{{ asset('assets\js\script3.js') }}"></script>
+    <script src="{{ asset('assets\js\user.js') }}"></script>
 </body>
 
 </html>
