@@ -195,11 +195,12 @@
                                                 <button type="submit" class="btn blue">Modifier</button>
                                             </form>
                                             <br>
-                                            <form action="{{ route('annonces.supprimer', $annonce->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn blue">Supprimer</button>
-                                            </form>
+                                            <form id="delete-form" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="button" onclick="confirmDelete()" class="btn blue">Supprimer</button>
+</form>
+
 
                                         </div>
                                     </div>

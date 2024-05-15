@@ -153,17 +153,21 @@ public function recupererAnnonce(Request $request, $annonceId)
             return response()->json(['error' => 'L\'annonce n\'existe pas.'], 404);
         }
 
+        // Créer une notification pour l'utilisateur qui a créé l'annonce
+        $notification = new Notification();
+        $notification->annonce_id = $annonce->id;
+        $notification->message = 'Votre annonce "' . $annonce->titre . '" a reçu une demande de récupération de la part de ' . $utilisateurConnecte->Nom_Complet;
+
         // Vérifier si l'utilisateur connecté est l'auteur de l'annonce
         if ($utilisateurConnecte->id != $annonce->id_utilisateur) {
             // Envoyer la demande à l'utilisateur qui a créé l'annonce
-            $utilisateurConnecte->envoyerDemandeRecuperation($annonceId);
+            $annonce->utilisateur->envoyerDemandeRecuperation($annonceId);
 
-            // Créer une notification
-            Notification::create([
-                'user_id' => $annonce->id_utilisateur,
-                'annonce_id' => $annonce->id,
-                'message' => 'Votre annonce "' . $annonce->titre . '" a reçu une demande de récupération de la part de ' . $utilisateurConnecte->Nom_Complet
-            ]);
+            // Enregistrer l'ID de l'utilisateur qui a cliqué sur "Je le récupère"
+            $notification->user_id = $utilisateurConnecte->id;
+
+            // Sauvegarder la notification
+            $notification->save();
 
             // Retourner une réponse JSON avec un message de succès
             return response()->json(['message' => 'Votre demande a été envoyée avec succès à '.$annonce->utilisateur->Nom_Complet.'.'], 200);
@@ -176,7 +180,6 @@ public function recupererAnnonce(Request $request, $annonceId)
         return response()->json(['error' => 'Vous devez vous connecter pour envoyer une demande de récupération.'], 401);
     }
 }
-
 
 
 }
