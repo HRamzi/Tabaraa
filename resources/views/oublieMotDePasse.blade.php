@@ -78,7 +78,7 @@
                             onclick="suivant()">
                             Suivant <i class="fa fa-chevron-right"></i>
                         </button>
-                        <a href="{{ route('home') }}"
+                        <a href="{{ url()->previous() }}"
                             class="btn lg red f-item f-md-33 text-center ma-xs"><i
                                 class="fa fa-chevron-left"></i>&nbsp;Retour</a>
                         <!-- Afficher le bouton de soumission uniquement si l'email est valide -->
@@ -112,8 +112,8 @@
     </div>
     <footer class="footer">
         <ul class="menu">
-            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Accueil</a></li>
-            <li class="menu__item"><a class="menu__link" href="{{ route('userHome') }}">Contact </a></li>
+            <li class="menu__item"><a class="menu__link" href="{{ route('home') }}">Accueil</a></li>
+            <li class="menu__item"><a class="menu__link" href="{{ route('home') }}">Contact </a></li>
         </ul>
         <p>&copy;2024 Tabaraa | Tous droits réservés</p>
     </footer>

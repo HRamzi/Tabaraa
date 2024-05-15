@@ -11,7 +11,6 @@ use App\Http\Controllers\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminAnnonceController;
 use App\Http\Controllers\MotDePasseOublieController;
-
 use App\Http\Controllers\NotificationController;
 
 
