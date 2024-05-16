@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+  use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Annonce;
@@ -16,57 +16,71 @@ class CreeAnnonceController extends Controller
         return view('annonces.cree', ['categories' => $categories]);
     }
 
-    public function store(Request $request)
-    {
-        // Valider les données du formulaire
-        $request->validate([
-            'titre' => 'required|string|max:255|filled',
-            'categorie' => 'required|string|max:255',
-            'ville' => 'required|string|max:255',
-            'numero_telephone' => 'required|string|max:20',
-            'photo' => 'required|image|max:2048',
-            'description' => 'required|string',
-        ], [
-            'titre.required' => 'Le titre est requis.',
-            'titre.filled' => 'Le titre ne peut pas être vide.',
-            'categorie.required' => 'La catégorie est requise.',
-            'categorie.filled' => 'La catégorie ne peut pas être vide.',
-            'ville.required' => 'La ville est requise.',
-            'ville.filled' => 'La ville ne peut pas être vide.',
-            'numero_telephone.required' => 'Le numéro de téléphone est requis.',
-            'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
-            'photo.required' => 'La photo est requise.',
-            'photo.filled' => 'La photo ne peut pas être vide.',
-            'description.required' => 'La description est requise.',
-            'description.filled' => 'La description ne peut pas être vide.',
-        ]);
 
-        // Enregistrer l'annonce dans la base de données
-        $annonce = new Annonce();
-        $annonce->titre = $request->titre;
-        $annonce->categorie = $request->categorie;
-        $annonce->ville = $request->ville;
-        $annonce->numero_telephone = $request->numero_telephone;
-        $annonce->description = $request->description;
-        $annonce->id_utilisateur = auth()->user()->id;
 
-        // Enregistrer l'image
-        if ($request->hasFile('photo')) {
-            if ($request->file('photo')->isValid()) {
-                $imagePath = $request->photo->store('uploads', 'public');
-                $annonce->photo = $imagePath;
-            } else {
-                return response()->json(['code' => 0, 'message' => 'Le fichier téléchargé n\'est pas valide.'], 400);
-            }
+public function store(Request $request)
+{
+    // Valider les données du formulaire
+    $validator = Validator::make($request->all(), [
+        'titre' => 'required|string|max:255|filled',
+        'categorie' => 'required|string|max:255',
+        'ville' => 'required|string|max:255',
+        'numero_telephone' => 'required|string|max:20',
+        'photo' => 'required|image|max:2048',
+        'description' => 'required|string',
+    ], [
+        'titre.required' => 'Le titre est requis.',
+        'titre.filled' => 'Le titre ne peut pas être vide.',
+        'categorie.required' => 'La catégorie est requise.',
+        'categorie.filled' => 'La catégorie ne peut pas être vide.',
+        'ville.required' => 'La ville est requise.',
+        'ville.filled' => 'La ville ne peut pas être vide.',
+        'numero_telephone.required' => 'Le numéro de téléphone est requis.',
+        'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
+        'photo.required' => 'La photo est requise.',
+        'photo.filled' => 'La photo ne peut pas être vide.',
+        'description.required' => 'La description est requise.',
+        'description.filled' => 'La description ne peut pas être vide.',
+    ]);
+
+    // Vérifier si la validation a échoué
+    if ($validator->fails()) {
+        // Renvoyer les erreurs de validation au format JSON
+        return response()->json(['code' => 0, 'errors' => $validator->errors()], 400);
+    }
+
+    // Enregistrer l'annonce dans la base de données
+    $annonce = new Annonce();
+    $annonce->titre = $request->titre;
+    $annonce->categorie = $request->categorie;
+    $annonce->ville = $request->ville;
+    $annonce->numero_telephone = $request->numero_telephone;
+    $annonce->description = $request->description;
+    $annonce->id_utilisateur = auth()->user()->id;
+
+    // Enregistrer l'image
+    if ($request->hasFile('photo')) {
+        if ($request->file('photo')->isValid()) {
+            $imagePath = $request->photo->store('uploads', 'public');
+            $annonce->photo = $imagePath;
         } else {
-            return response()->json(['code' => 0, 'message' => 'Veuillez sélectionner une image.'], 400);
+            return response()->json(['code' => 0, 'message' => 'Le fichier téléchargé n\'est pas valide.'], 400);
         }
+    } else {
+        return response()->json(['code' => 0, 'message' => 'Veuillez sélectionner une image.'], 400);
+    }
 
-        $annonce->save();
-
+    if ($annonce->save()) {
         // Réponse de succès
         return response()->json(['code' => 1, 'message' => 'Annonce créée avec succès.'], 200);
+    } else {
+        // En cas d'erreur lors de l'enregistrement
+        return response()->json(['code' => 0, 'message' => 'Une erreur s\'est produite lors de la création de l\'annonce.'], 500);
     }
+}
+
+
+
     public function recherche(Request $request)
 {
     // Validation des données d'entrée

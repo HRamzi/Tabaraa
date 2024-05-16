@@ -191,42 +191,42 @@
     </div>
 
 
+<!-- Modifier le code du script de réponse pour afficher les messages d'erreur dans une fenêtre SweetAlert -->
 <script>
-    // Cette fonction vérifie la réponse du serveur et affiche le message approprié
-    function handleResponse(data) {
-        if (data.code === 1) {
-            // Affichage d'un message de succès avec SweetAlert
-            Swal.fire({
-                title: "Annonce créée avec succès !",
-                text: "Votre annonce a été publiée avec succès.",
-                icon: "success",
-                timer: 5000
-            });
-        } else {
-            // Affichage d'un message d'erreur générique
+   function handleResponse(data) {
+    if (data.code === 1) {
+        Swal.fire({
+            title: "Annonce créée avec succès !",
+            text: "Votre annonce a été publiée avec succès.",
+            icon: "success",
+            timer: 5000
+        }).then(() => {
+            // Rediriger vers la page des annonces de l'utilisateur
+            window.location.href = "{{ route('mesAnnonces') }}";
+        });
+    } else {
+        if (data.message) {
+            // S'il y a un message d'erreur global, l'afficher
             Swal.fire({
                 title: "Erreur !",
-                text: "Une erreur s'est produite lors de la publication de votre annonce.",
+                text: data.message,
                 icon: "error",
                 timer: 5000
             });
-
-            // Si le serveur a renvoyé des erreurs de validation
-            if (data.errors) {
-                // Afficher les messages d'erreur de validation
-                Object.values(data.errors).forEach(function(error) {
-                    Swal.fire({
-                        title: "Erreur de validation !",
-                        text: error[0],
-                        icon: "error",
-                        timer: 5000
-                    });
+        } else if (data.errors) {
+            // Sinon, s'il y a des erreurs de validation, afficher chaque erreur
+            Object.values(data.errors).forEach(function(error) {
+                Swal.fire({
+                    title: "Erreur de validation !",
+                    text: error[0],
+                    icon: "error",
+                    timer: 5000
                 });
-            }
+            });
         }
     }
+}
 
-    // Fonction pour envoyer le formulaire et gérer la réponse
     function submitForm() {
         var form = document.getElementById('formAnnonce');
         var formData = new FormData(form);
@@ -247,6 +247,7 @@
         });
     }
 </script>
+
 
 ...
 

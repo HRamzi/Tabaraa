@@ -138,7 +138,7 @@
             </div>
             <div class="f-item">
                 <div class="empty-zone">
-                    <h3>pouvez poster une annonce en allant sur cette page : <a href="{{ route('annonces.cree') }}">Créer une annonce</a></h3>
+                    <h3>pouvez poster une annonce en allant sur cette page : <a href="{{ route('annonces.create') }}">Créer une annonce</a></h3>
                 </div>
             </div>
             @endif
