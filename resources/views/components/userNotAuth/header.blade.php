@@ -29,16 +29,38 @@
                     <button type="button" aria-label="Recherche"><i class="fa fa-search"></i></button>
                 </div>
             </div>
-            <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
-                <a class="repliable btn  post-holder" href="{{ route('annonces.create') }}" title="Publier une annonce pour donner un objet">
-                    <i class="fa fa-plus"></i>
-                    <span class="label">Créer une annonce</span>
-                </a>
-                <a id="header-login-btn" class="repliable tool" href="{{ route('afficherFormulaireConnexion') }}">
-                    <i class="fa fa-user fa"></i>
-                    <span>Mon Compte</span>
-                </a>
-            </div>
+          <div class="f-grow-1 f-container f-wrap-nowrap f-align-center f-content-end">
+    @auth
+        <a class="repliable btn post-holder" href="{{ route('annonces.create') }}" title="Publier une annonce pour donner un objet">
+            <i class="fa fa-plus"></i>
+            <span class="label">Créer une annonce</span>
+        </a>
+    @else
+        <a class="repliable btn post-holder" href="{{ route('afficherFormulaireConnexion') }}" title="Connectez-vous pour créer une annonce">
+            <i class="fa fa-plus"></i>
+            <span class="label">Créer une annonce</span>
+        </a>
+    @endauth
+
+    <a id="header-login-btn" class="repliable tool" href="{{ route('afficherFormulaireConnexion') }}">
+        <i class="fa fa-user fa"></i>
+        <span>Mon Compte</span>
+    </a>
+</div>
+
+<script>
+    // Ajout d'un événement click sur le bouton de création d'annonce
+    document.querySelector('.btn.post-holder').addEventListener('click', function(event) {
+        // Vérifier si l'utilisateur est authentifié
+        if (!{{ auth()->check() }}) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
+            // Rediriger vers la page de connexion
+            window.location.href = "{{ route('afficherFormulaireConnexion') }}";
+        }
+    });
+</script>
+
         </div>
         <div class="f-container f-content-center spaced" id="global-search">
             <div class="f-item">

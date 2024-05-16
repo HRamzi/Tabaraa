@@ -184,7 +184,8 @@
                 </h2>
                 <!-- Utilisez l'ID de l'utilisateur authentifié comme valeur de id_expediteur -->
                 <input type="hidden" id="id_expediteur" name="id_expediteur" value="{{ Auth::id() }}">
-                <input type="hidden" name="id_destinataire" value="1" />
+                <!-- Utilisez l'ID de l'utilisateur qui a créé l'annonce comme valeur de id_destinataire -->
+                <input type="hidden" name="id_destinataire" value="{{ $annonce->utilisateur->id }}" />
                 <textarea class="reset-input" id="msg-target" name="message" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
                 <div class="text-center mt-md">
                     <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
@@ -236,9 +237,7 @@
     <script src="{{ asset('assets\js\script2.js') }}"></script>
     <script src="{{ asset('assets\js\script3.js') }}"></script>
     <script src="{{ asset('assets\js\user.js') }}"></script><!-- Ajoutez jQuery -->
-  <script>
-    var warningDisplayed = false; // Variable pour suivre si l'avertissement a déjà été affiché
-
+<script>
     // Fonction pour envoyer le message
     function sendMessage() {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -282,23 +281,20 @@
 
     // Fonction pour afficher un avertissement si l'utilisateur n'est pas connecté
     function showWarningMessage() {
-        if (!warningDisplayed) { // Vérifier si l'avertissement n'a pas déjà été affiché
-            warningDisplayed = true; // Marquer l'avertissement comme déjà affiché
-            Swal.fire({
-                title: "Vous devez d'abord vous connecter",
-                html: "<p>Pour récupérer cet article, veuillez d'abord vous connecter.</p>",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Connexion'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Rediriger vers la page de connexion
-                    window.location.href = "{{ route('afficherFormulaireConnexion') }}";
-                }
-            });
-        }
+        Swal.fire({
+            title: "Vous devez d'abord vous connecter",
+            html: "<p>Pour récupérer cet article, veuillez d'abord vous connecter.</p>",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Connexion'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Rediriger vers la page de connexion
+                window.location.href = "{{ route('afficherFormulaireConnexion') }}";
+            }
+        });
     }
 
     // Fonction pour activer l'édition du message si l'utilisateur est connecté
@@ -309,7 +305,7 @@
         // Ajouter un gestionnaire d'événements pour le focus
         messageTextarea.addEventListener('focus', function() {
             // Vérifier si l'utilisateur est connecté
-            @if(session()->has('user'))
+            @if(Auth::check())
                 // Si l'utilisateur est connecté, ne rien faire
             @else
                 // Si l'utilisateur n'est pas connecté, afficher l'avertissement
@@ -323,6 +319,7 @@
     // Appeler la fonction pour activer l'édition du message
     enableMessageEditing();
 </script>
+
 
 
 
