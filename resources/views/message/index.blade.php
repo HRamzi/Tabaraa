@@ -320,8 +320,8 @@
                 messageElement.querySelector('.reply-button').addEventListener('click', function (event) {
                     event.stopPropagation();
                     let replyForm = messageElement.querySelector('.reply-form');
-                    replyForm.style.display = replyForm.style.display === 'none' || reply.style.display === '' ? 'flex' : 'none';
-                });
+                   replyForm.style.display = replyForm.style.display === 'none' || replyForm.style.display === '' ? 'flex' : 'none';
+});
 
                            messageElement.querySelector('.send-reply-button').addEventListener('click', function (event) {
                 event.stopPropagation();
