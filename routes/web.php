@@ -110,3 +110,5 @@ Route::post('/mark-all-messages-as-read', [PusherController::class, 'markAllMess
 Route::get('/get-notifications', [NotificationController::class, 'getNotifications'])->name('getNotifications');
 Route::get('/notification/count', [NotificationController::class, 'getNotificationCount'])->name('getNotificationCount');
 Route::get('/notifications', [NotificationController::class, 'showNotificationsView'])->name('notifications');
+Route::get('/get-received-messages', [PusherController::class, 'getReceivedMessages'])->name('getReceivedMessages');
+Route::get('/get-sent-messages', [PusherController::class, 'getSentMessages'])->name('getSentMessages');

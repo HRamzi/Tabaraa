@@ -178,22 +178,21 @@
                    <div id="">
     <div class="panel pt-xs pb-xs">
         <div id="form-holder">
-            <form class="new-msg" id="message-form">
-                <h2 class="annonce-detail-title-rep">
-                    <span><i class="fa fa-comments-o"></i>Contacter le destinataire</span>
-                </h2>
-                <!-- Utilisez l'ID de l'utilisateur authentifié comme valeur de id_expediteur -->
-                <input type="hidden" id="id_expediteur" name="id_expediteur" value="{{ Auth::id() }}">
-                <!-- Utilisez l'ID de l'utilisateur qui a créé l'annonce comme valeur de id_destinataire -->
-                <input type="hidden" name="id_destinataire" value="{{ $annonce->utilisateur->id }}" />
-                <textarea class="reset-input" id="msg-target" name="message" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
-                <div class="text-center mt-md">
-                    <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
-                        <i class="fa fa-envelope"></i>
-                        Envoyer
-                    </button>
-                </div>
-            </form>
+           <form class="new-msg" id="message-form">
+    <h2 class="annonce-detail-title-rep">
+        <span><i class="fa fa-comments-o"></i> Contacter le destinataire</span>
+    </h2>
+    <input type="hidden" id="id_expediteur" name="id_expediteur" value="{{ Auth::id() }}">
+    <input type="hidden" name="id_destinataire" value="{{ $annonce->utilisateur->id }}">
+    <input type="hidden" name="id_annonce" value="{{ $annonce->id }}"> <!-- Champ caché pour l'ID de l'annonce -->
+    <textarea class="reset-input" id="msg-target" name="message" cols="100" rows="6" maxlength="1000" placeholder="Écrivez votre message ici"></textarea>
+    <div class="text-center mt-md">
+        <button type="button" class="btn blue lg submit-contact" onclick="sendMessage()">
+            <i class="fa fa-envelope"></i> Envoyer
+        </button>
+    </div>
+</form>
+
         </div>
     </div>
 </div>
