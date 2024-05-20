@@ -15,18 +15,25 @@
 
     
    @if(auth()->check())
+    @if(auth()->user()->isAdmin())
+        <header class="tabaraa-header">
+            @include('components.userAuth.adminheader')
+        </header>
+    @else
         <header class="tabaraa-header">
             @include('components.userAuth.header')
         </header>
-        @include('components.userAuth.ham_nav')
-    @else
-        <header class="tabaraa-header">
-            @include('components.userNotAuth.header')
-        </header>
-        <div class="ham-nav ham-right" id="nav-global" data-icon="bell" data-title="Tabaraa">
-            @include('components.userNotAuth.ham-nav_ham-right')
-        </div>
     @endif
+    @include('components.userAuth.ham_nav')
+@else
+    <header class="tabaraa-header">
+        @include('components.userNotAuth.header')
+    </header>
+    <div class="ham-nav ham-right" id="nav-global" data-icon="bell" data-title="Tabaraa">
+        @include('components.userNotAuth.ham-nav_ham-right')
+    </div>
+@endif
+
 
 
     <div class="global-shadow"></div>

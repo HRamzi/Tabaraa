@@ -17,6 +17,11 @@ class Utilisateur extends Authenticatable
         'photo_profile',
         'role',
     ];
+// Dans votre modèle Utilisateur
+public function isAdmin()
+{
+    return $this->role === 'admin'; // Assurez-vous d'ajuster cela en fonction de votre logique de rôles
+}
 
     public function annonces()
     {
