@@ -30,11 +30,10 @@ Route::get('/user-home', [HomeController::class, 'afficherUserHomeAnnonces'])
     ->middleware('auth')
     ->name('userHome');
 
+Route::get('/admin-home', [AdminHomeController::class, 'index'])
+    ->middleware('auth')
+    ->name('admin.home');
 
-// Routes pour l'administration
-Route::get('/admin-home', [AdminHomeController::class, 'index'])->name('admin.home');
-
-// Routes pour la gestion des utilisateurs d'administration
 Route::prefix('admin')->group(function () {
     Route::get('/utilisateurs', [AdminUserController::class, 'index'])->name('admin.users.index');
     Route::get('/utilisateurs/{utilisateur}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
