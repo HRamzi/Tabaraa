@@ -277,72 +277,75 @@
             });
         }
 
-        function displayMessages(messages, showAnnonce, showFilterButtons) {
-            let messagesContainer = document.querySelector('.messages');
-            messagesContainer.innerHTML = ''; // Clear existing messages
+function displayMessages(messages, showAnnonce, showFilterButtons) {
+    // Trier les messages par date et heure
+    messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
-            messages.forEach(message => {
-                if (!message.utilisateur) return; // Skip if utilisateur is undefined
+    let messagesContainer = document.querySelector('.messages');
+    messagesContainer.innerHTML = ''; // Clear existing messages
 
-                let messageElement = document.createElement('div');
-                messageElement.classList.add('message', message.id_expediteur === {{ Auth::id() }} ? 'right' : 'left');
-                messageElement.setAttribute('data-id', message.id);
+    messages.forEach(message => {
+        if (!message.utilisateur) return; // Skip if utilisateur is undefined
 
-                let userPhoto = message.utilisateur.photo_profile ? `/storage/${message.utilisateur.photo_profile}` : 'default-avatar.png'; // Fallback to default avatar if photo_profile is missing
+        let messageElement = document.createElement('div');
+        messageElement.classList.add('message', message.id_expediteur === {{ Auth::id() }} ? 'right' : 'left');
+        messageElement.setAttribute('data-id', message.id);
 
-                let messageAnnonce = '';
-                if (showAnnonce && message.id_annonce) {
-                    if (message.id_expediteur === {{ Auth::id() }}) {
-                        messageAnnonce = `Vous avez répondu à : ${message.destinataire ? message.destinataire.Nom_Complet : 'N/A'}`;
-                    } else {
-                        messageAnnonce = `Envoyé depuis annonce : ${message.annonce ? message.annonce.titre : 'N/A'}`;
-                    }
-                }
+        let userPhoto = message.utilisateur.photo_profile ? `/storage/${message.utilisateur.photo_profile}` : 'default-avatar.png'; // Fallback to default avatar if photo_profile is missing
 
-                messageElement.innerHTML = `
-                    <img src="${userPhoto}" width="50px" height="50px" alt="Avatar">
-                    <div class="message-content">
-                        <p><strong>${message.utilisateur.Nom_Complet}</strong>: ${message.contenu}</p>
-                        ${messageAnnonce ? `<p class="message-annonce">${messageAnnonce}</p>` : ''}
-                    </div>
-                    <button class="reply-button">Répondre</button>
-                    <div class="reply-form">
-                        <input type="text" class="reply-message" placeholder="Écrire une réponse...">
-                        <button class="send-reply-button" data-destinataire="${message.id_expediteur}" data-annonce="${message.id_annonce}" data-nom-utilisateur="${message.utilisateur.Nom_Complet}">Envoyer</button>
-                    </div>
-                `;
+        let messageAnnonce = '';
+        if (showAnnonce && message.id_annonce) {
+            if (message.id_expediteur === {{ Auth::id() }}) {
+                messageAnnonce = `Vous avez répondu à : ${message.destinataire ? message.destinataire.Nom_Complet : 'N/A'}`;
+            } else {
+                messageAnnonce = `Envoyé depuis annonce : ${message.annonce ? message.annonce.titre : 'N/A'}`;
+            }
+        }
 
-                messageElement.addEventListener('click', () => {
-                    let replyButton = messageElement.querySelector('.reply-button');
-                    replyButton.style.display = replyButton.style.display === 'none' || replyButton.style.display === '' ? 'block' : 'none';
-                });
+        messageElement.innerHTML = `
+            <img src="${userPhoto}" width="50px" height="50px" alt="Avatar">
+            <div class="message-content">
+                <p><strong>${message.utilisateur.Nom_Complet}</strong>: ${message.contenu}</p>
+                ${messageAnnonce ? `<p class="message-annonce">${messageAnnonce}</p>` : ''}
+            </div>
+            <button class="reply-button">Répondre</button>
+            <div class="reply-form">
+                <input type="text" class="reply-message" placeholder="Écrire une réponse...">
+                <button class="send-reply-button" data-destinataire="${message.id_expediteur}" data-annonce="${message.id_annonce}" data-nom-utilisateur="${message.utilisateur.Nom_Complet}">Envoyer</button>
+            </div>
+        `;
 
-                messageElement.querySelector('.reply-button').addEventListener('click', function (event) {
-                    event.stopPropagation();
-                    let replyForm = messageElement.querySelector('.reply-form');
-                   replyForm.style.display = replyForm.style.display === 'none' || replyForm.style.display === '' ? 'flex' : 'none';
-});
-
-                           messageElement.querySelector('.send-reply-button').addEventListener('click', function (event) {
-                event.stopPropagation();
-                let form = messageElement.querySelector('.reply-form');
-                let replyMessage = form.querySelector('.reply-message').value;
-                let idDestinataire = this.getAttribute('data-destinataire');
-                let idAnnonce = this.getAttribute('data-annonce');
-                let nomUtilisateur = this.getAttribute('data-nom-utilisateur'); // Get the user's full name from the attribute
-
-                if (replyMessage) {
-                    sendReply(replyMessage, idDestinataire, idAnnonce, nomUtilisateur, messageElement);
-                }
-            });
-
-            messagesContainer.appendChild(messageElement);
+        messageElement.addEventListener('click', () => {
+            let replyButton = messageElement.querySelector('.reply-button');
+            replyButton.style.display = replyButton.style.display === 'none' || replyButton.style.display === '' ? 'block' : 'none';
         });
 
-        // Hide filter buttons container if not needed
-        let filterButtonsContainer = document.getElementById('filter-buttons-container');
-        filterButtonsContainer.style.display = showFilterButtons ? 'flex' : 'none';
-    }
+        messageElement.querySelector('.reply-button').addEventListener('click', function (event) {
+            event.stopPropagation();
+            let replyForm = messageElement.querySelector('.reply-form');
+            replyForm.style.display = replyForm.style.display === 'none' || replyForm.style.display === '' ? 'flex' : 'none';
+        });
+
+        messageElement.querySelector('.send-reply-button').addEventListener('click', function (event) {
+            event.stopPropagation();
+            let form = messageElement.querySelector('.reply-form');
+            let replyMessage = form.querySelector('.reply-message').value;
+            let idDestinataire = this.getAttribute('data-destinataire');
+            let idAnnonce = this.getAttribute('data-annonce');
+            let nomUtilisateur = this.getAttribute('data-nom-utilisateur'); // Get the user's full name from the attribute
+
+            if (replyMessage) {
+                sendReply(replyMessage, idDestinataire, idAnnonce, nomUtilisateur, messageElement);
+            }
+        });
+
+        messagesContainer.appendChild(messageElement);
+    });
+
+    // Hide filter buttons container if not needed
+    let filterButtonsContainer = document.getElementById('filter-buttons-container');
+    filterButtonsContainer.style.display = showFilterButtons ? 'flex' : 'none';
+}
 
     function sendReply(contenu, idDestinataire, idAnnonce, nomUtilisateur, messageElement) {
         let formData = new FormData();
