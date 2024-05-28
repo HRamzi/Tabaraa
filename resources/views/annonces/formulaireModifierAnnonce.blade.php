@@ -143,14 +143,52 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
+ $(document).ready(function() {
+    let messageShown = false; // Flag to ensure the success or error message is shown only once
+
+    $('#formAnnonce').on('submit', function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            method: $(this).attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.code === 1 && !messageShown) {
+                    $('#content-form').hide();
+                    // Appeler la fonction showSuccessMessage lorsque la modification est réussie
+                    showSuccessMessage();
+                    messageShown = true; // Set the flag to true
+                } else if (!messageShown) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.message // Afficher le message d'erreur retourné par le serveur
+                    });
+                    messageShown = true; // Set the flag to true
+                }
+            },
+            error: function(xhr, status, error) {
+                const errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Une erreur est survenue. Veuillez réessayer.';
+                if (!messageShown) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: errorMessage
+                    });
+                    messageShown = true; // Set the flag to true
+                }
+            }
+        });
+    });
+
     // Définition de la fonction showSuccessMessage
     function showSuccessMessage() {
-       var data = {
-                code: 1
-            };
-
-            // Vérifiez si la réponse de la requête est 1 (succès)
-            if (data.code === 1) { Swal.fire({
+        Swal.fire({
             icon: 'success',
             title: 'Succès!',
             text: 'Annonce modifiée avec succès!',
@@ -161,51 +199,10 @@
                 window.location.href = "{{ route('mesAnnonces') }}";
             }
         });
-         }
     }
+});
 
-    $(document).ready(function() {
-        let messageShown = false; // Flag to ensure the success message is shown only once
 
-        $('#formAnnonce').on('submit', function(event) {
-            event.preventDefault();
-
-            var formData = new FormData(this);
-
-            $.ajax({
-                url: $(this).attr('action'),
-                method: $(this).attr('method'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.code === 1 && !messageShown) {
-                        $('#content-form').hide();
-                        // Appeler la fonction showSuccessMessage lorsque la modification est réussie
-                       // showSuccessMessage();
-                        messageShown = true; // Set the flag to true
-                    } else if (!messageShown) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: response.message // Afficher le message d'erreur retourné par le serveur
-                        });
-                        messageShown = true; // Set the flag to true
-                    }
-                },
-                error: function() {
-                    if (!messageShown) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Une erreur est survenue. Veuillez réessayer.'
-                        });
-                        messageShown = true; // Set the flag to true
-                    }
-                }
-            });
-        });
-    });
 </script>
 
 
