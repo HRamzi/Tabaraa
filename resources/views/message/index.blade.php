@@ -241,8 +241,8 @@
                 <p>connecté</p>
             </div>
             <div class="action-buttons">
-                <button type="button" class="btn blue lg submit-contact" onclick="getReceivedMessages()">Demandes par message</button>
-                <button type="button" class="btn blue lg submit-contact" onclick="getSentMessages()">Messages envoyés</button>
+                <button type="button" class="btn blue lg submit-contact" onclick="getReceivedMessages()">messages demande don</button>
+                <button type="button" class="btn blue lg submit-contact" onclick="getSentMessages()"> Mes Messages</button>
             </div>
         </div>
         <div id="filter-buttons-container" class="filter-buttons"></div>
