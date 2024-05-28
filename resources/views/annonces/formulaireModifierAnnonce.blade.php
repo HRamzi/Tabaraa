@@ -145,9 +145,12 @@
 <script>
     // Définition de la fonction showSuccessMessage
     function showSuccessMessage() {
-        // Code pour afficher un message de succès
-        // Par exemple, vous pouvez utiliser Swal.fire pour afficher une alerte
-        Swal.fire({
+       var data = {
+                code: 1
+            };
+
+            // Vérifiez si la réponse de la requête est 1 (succès)
+            if (data.code === 1) { Swal.fire({
             icon: 'success',
             title: 'Succès!',
             text: 'Annonce modifiée avec succès!',
@@ -158,9 +161,12 @@
                 window.location.href = "{{ route('mesAnnonces') }}";
             }
         });
+         }
     }
 
     $(document).ready(function() {
+        let messageShown = false; // Flag to ensure the success message is shown only once
+
         $('#formAnnonce').on('submit', function(event) {
             event.preventDefault();
 
@@ -173,29 +179,35 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    if (response.code === 1) {
+                    if (response.code === 1 && !messageShown) {
                         $('#content-form').hide();
                         // Appeler la fonction showSuccessMessage lorsque la modification est réussie
-                        showSuccessMessage();
-                    } else {
+                       // showSuccessMessage();
+                        messageShown = true; // Set the flag to true
+                    } else if (!messageShown) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
                             text: response.message // Afficher le message d'erreur retourné par le serveur
                         });
+                        messageShown = true; // Set the flag to true
                     }
                 },
                 error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Une erreur est survenue. Veuillez réessayer.'
-                    });
+                    if (!messageShown) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Une erreur est survenue. Veuillez réessayer.'
+                        });
+                        messageShown = true; // Set the flag to true
+                    }
                 }
             });
         });
     });
 </script>
+
 
 
 

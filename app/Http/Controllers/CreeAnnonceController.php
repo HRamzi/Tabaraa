@@ -132,33 +132,34 @@ public function store(Request $request)
         return view('annonces.formulaireModifierAnnonce', compact('annonce', 'categories'));
     }
 
-    public function modifierAnnonce(Request $request, Annonce $annonce)
-    {
-        $request->validate([
-            'titre' => 'required|string|max:255|filled',
-            'ville' => 'required|string|max:255',
-            'numero_telephone' => 'required|string|max:20',
-            'description' => 'required|string',
-            'photo' => 'image|max:2048', // Ne pas rendre la photo obligatoire pour la modification
-        ], [
-            'titre.required' => 'Le titre est requis.',
-            'titre.filled' => 'Le titre ne peut pas être vide.',
-            'numero_telephone.required' => 'Le numéro de téléphone ne peut pas être vide.',
-            'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
-            'description.required' => 'La description est requis.',
-            'description.filled' => 'La description ne peut pas être vide.',
-        ]);
+public function modifierAnnonce(Request $request, Annonce $annonce)
+{
+    $request->validate([
+        'titre' => 'required|string|max:255|filled',
+        'ville' => 'required|string|max:255',
+        'numero_telephone' => 'required|string|max:20',
+        'description' => 'required|string',
+        'photo' => 'image|max:2048', // Ne pas rendre la photo obligatoire pour la modification
+    ], [
+        'titre.required' => 'Le titre est requis.',
+        'titre.filled' => 'Le titre ne peut pas être vide.',
+        'numero_telephone.required' => 'Le numéro de téléphone ne peut pas être vide.',
+        'numero_telephone.filled' => 'Le numéro de téléphone ne peut pas être vide.',
+        'description.required' => 'La description est requise.',
+        'description.filled' => 'La description ne peut pas être vide.',
+    ]);
 
-        // Mettre à jour les champs sauf la photo
-        $annonce->update($request->except('photo'));
+    // Mettre à jour les champs sauf la photo
+    $annonce->update($request->except('photo'));
 
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('uploads', 'public');
-            $annonce->update(['photo' => $photoPath]);
-        }
-
-        return redirect('/mesAnnonces')->with('success', 'Annonce mise à jour avec succès.');
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('uploads', 'public');
+        $annonce->update(['photo' => $photoPath]);
     }
+
+    return response()->json(['code' => 1, 'message' => 'Annonce mise à jour avec succès.'], 200);
+}
+
 
     public function supprimerAnnonce($id)
     {
